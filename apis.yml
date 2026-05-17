@@ -58,7 +58,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
-      - type: API Reference
+      - type: APIReference
         url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm
   - name: Service Cloud Omni-Channel API
     description: >-
@@ -88,7 +88,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm
-      - type: API Reference
+      - type: APIReference
         url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm
   - name: Service Cloud Einstein Bots API
     description: >-
@@ -104,7 +104,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
-      - type: API Reference
+      - type: APIReference
         url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_bot.htm
   - name: Service Cloud Streaming API
     description: >-
@@ -152,19 +152,19 @@ include: []
 common:
   - type: Portal
     url: https://developer.salesforce.com/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
   - type: Authentication
     url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
-  - type: Rate Limits
+  - type: RateLimits
     url: https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
   - type: SDKs
     url: https://developer.salesforce.com/tools/sdks
-  - type: Status Page
+  - type: StatusPage
     url: https://status.salesforce.com/
   - type: Support
     url: https://help.salesforce.com/
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://www.salesforce.com/company/legal/agreements/
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://www.salesforce.com/company/privacy/
