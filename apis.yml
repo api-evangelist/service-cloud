@@ -150,6 +150,10 @@ tags:
   - Support
 include: []
 common:
+  - type: GitHubOrganization
+    url: https://github.com/forcedotcom
+  - type: LinkedIn
+    url: https://www.linkedin.com/showcase/salesforce-for-service
   - type: Portal
     url: https://developer.salesforce.com/
   - type: GettingStarted
