@@ -150,6 +150,8 @@ tags:
   - Support
 include: []
 common:
+  - type: DomainSecurity
+    url: security/service-cloud-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/forcedotcom
   - type: LinkedIn
