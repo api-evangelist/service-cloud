@@ -2,6 +2,18 @@ name: Salesforce Service Cloud APIs
 description: >-
   A collection of APIs for Salesforce Service Cloud, enabling customer service and
   support operations.
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
 image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
 created: '2024-01-15'
 modified: '2024-01-15'
