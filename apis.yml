@@ -17,7 +17,7 @@ accessModel:
 image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
 created: '2024-01-15'
 modified: '2024-01-15'
-specificationVersion: '0.18'
+specificationVersion: '0.23'
 url: https://api.salesforce.com/apis.json
 apis:
   - name: Service Cloud REST API
