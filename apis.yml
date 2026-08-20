@@ -108,6 +108,12 @@ apis:
     humanUrl: https://developer.salesforce.com/docs/service/einstein-bots
     baseUrl: https://yourInstance.salesforce.com/services/data/v59.0/einstein/bots
     tags:
+      - Artificial Intelligence
+      - Automation
+      - Bots
+      - Chatbots
+      - Einstein
+    tags_raw:
       - AI
       - Automation
       - Bots
@@ -124,6 +130,11 @@ apis:
     humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/
     baseUrl: https://yourInstance.salesforce.com/cometd/59.0
     tags:
+      - Event
+      - Push Notifications
+      - Real-Time
+      - Streaming
+    tags_raw:
       - Events
       - Push-Notifications
       - Real-Time
@@ -140,6 +151,11 @@ apis:
     humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
     baseUrl: https://yourInstance.salesforce.com/support/api/59.0/cti
     tags:
+      - Call Center
+      - CTI
+      - Phone
+      - Telephony
+    tags_raw:
       - Call-Center
       - CTI
       - Phone
@@ -154,6 +170,13 @@ maintainers:
     email: developer@salesforce.com
     url: https://developer.salesforce.com
 tags:
+  - Cloud
+  - CRM
+  - Customer Service
+  - Enterprise
+  - Salesforce
+  - Support
+tags_raw:
   - Cloud
   - CRM
   - Customer-Service
