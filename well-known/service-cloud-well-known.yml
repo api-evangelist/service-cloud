@@ -1,0 +1,124 @@
+generated: '2026-08-27'
+method: probed
+source: >-
+  Anonymous HTTP probes of /.well-known/* on every host named in apis.yml, the
+  Einstein Bots OpenAPI servers[] host, and the Salesforce hosted-MCP host, 2026-08-27.
+note: >-
+  developer.salesforce.com answers 403 to every non-browser request, including its root,
+  so its /.well-known/* results are a bot challenge and NOT evidence of absence.
+  www.salesforce.com 302s every /.well-known/* path to the marketing site, which is a
+  soft-404 rather than a served document. The real documents are on api.salesforce.com
+  and login.salesforce.com.
+hosts:
+  - host: api.salesforce.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: service-cloud-api-oauth-authorization-server.json
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: service-cloud-api-oauth-protected-resource.json
+      - path: /.well-known/oauth-protected-resource/platform/mcp/v1/platform/sobject-all
+        status: 200
+        file: service-cloud-mcp-oauth-protected-resource.json
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: login.salesforce.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: service-cloud-login-openid-configuration.json
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+  - host: help.salesforce.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        note: >-
+          Served by the Salesforce Help Experience Cloud site's own OIDC provider
+          (end_session_endpoint https://help.salesforce.com/services/auth/idp/oidc/logout).
+          Not the platform API authorization server; recorded but not saved.
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+      - path: /.well-known/agent.json
+        status: 401
+  - host: www.salesforce.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 302
+        note: 302 to the marketing site; no document served.
+      - path: /.well-known/openid-configuration
+        status: 302
+      - path: /.well-known/oauth-authorization-server
+        status: 302
+      - path: /.well-known/api-catalog
+        status: 302
+      - path: /.well-known/ai-plugin.json
+        status: 302
+      - path: /.well-known/agent-card.json
+        status: 302
+      - path: /.well-known/agent.json
+        status: 302
+  - host: developer.salesforce.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+        note: Akamai bot challenge — the host 403s its own root to non-browser clients.
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+      - path: /.well-known/agent-card.json
+        status: 403
+      - path: /.well-known/agent.json
+        status: 403
+  - host: trust.salesforce.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+findings:
+  security_txt: false
+  api_catalog: false
+  agent_card: false
+  oauth_authorization_server: true
+  oauth_protected_resource: true
+  openid_configuration: true
+  rfc9728_per_resource_metadata: true

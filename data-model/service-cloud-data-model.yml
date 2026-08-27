@@ -1,0 +1,130 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/service-cloud-einstein-bots-openapi.yml ($ref graph across components.schemas),
+  grpc/service-cloud-pubsub-api.proto, and the object names Salesforce's own hosted-MCP and REST
+  documentation exposes for Service Cloud.
+note: >-
+  TWO DISCONNECTED MODELS. The only published contract is the Einstein Bots conversational envelope,
+  which is a MESSAGE model, not the Service Cloud record model. The record model (Case, Knowledge,
+  chat transcripts) is real and documented in prose, but has no published static schema — an org
+  generates its own describe/OAS output behind authentication. The record section below therefore
+  carries object names and relationships Salesforce documents, and NO invented fields.
+models:
+  - name: Einstein Bots conversational model
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    derivation: '$ref graph, 51 schemas'
+    root_entities: [InitMessageEnvelope, ChatMessageEnvelope, ResponseEnvelope, ChatMessageResponseEnvelope]
+    entities:
+      - name: InitMessageEnvelope
+        role: request body of startSession
+        relationships:
+          - {type: has_one, target: ExternalSessionKey, via: '$ref'}
+          - {type: has_one, target: ForceConfig, via: '$ref'}
+          - {type: has_one, target: Referrer, via: '$ref'}
+          - {type: has_one, target: ResponseOptions, via: '$ref'}
+          - {type: has_one, target: TextInitMessage, via: '$ref'}
+          - {type: has_many, target: Variables, via: '$ref'}
+      - name: ChatMessageEnvelope
+        role: request body of continueSession
+        relationships:
+          - {type: has_one, target: TextMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: ChoiceMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: RedirectMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: SetVariablesMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: TransferSucceededRequestMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: TransferFailedRequestMessage, via: 'oneOf $ref'}
+          - {type: has_one, target: ResponseOptions, via: '$ref'}
+      - name: ResponseEnvelope
+        role: response of startSession
+        relationships:
+          - {type: has_one, target: ResponseSessionId, via: '$ref'}
+          - {type: has_one, target: BotVersion, via: '$ref'}
+          - {type: has_many, target: TextResponseMessage, via: '$ref'}
+          - {type: has_many, target: ChoicesResponseMessage, via: '$ref'}
+          - {type: has_many, target: EscalateResponseMessage, via: '$ref'}
+          - {type: has_many, target: SessionEndedResponseMessage, via: '$ref'}
+          - {type: has_many, target: Intents, via: '$ref'}
+          - {type: has_many, target: Entities, via: '$ref'}
+          - {type: has_many, target: Variables, via: '$ref'}
+          - {type: has_many, target: Links, via: '$ref'}
+      - name: ChatMessageResponseEnvelope
+        role: response of continueSession and endSession
+        relationships: 'same shape as ResponseEnvelope without ResponseSessionId'
+      - name: Variables
+        role: polymorphic variable container
+        relationships:
+          - {type: has_one, target: TextVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: NumberVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: BooleanVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: DateVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: DateTimeVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: MoneyVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: ListVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: ObjectVariable, via: 'oneOf $ref'}
+          - {type: has_one, target: RefVariable, via: 'oneOf $ref'}
+        note: ObjectVariable recurses into Variables — the model is self-referential.
+      - name: Intents
+        relationships: [{type: has_many, target: NormalizedIntent, via: '$ref'}]
+      - name: NormalizedIntent
+        relationships: [{type: has_one, target: IntentSource, via: '$ref'}]
+      - name: Entities
+        relationships: [{type: has_many, target: NormalizedEntity, via: '$ref'}]
+      - name: NormalizedEntity
+        relationships:
+          - {type: has_one, target: EntitySource, via: '$ref'}
+          - {type: has_one, target: EntityType, via: '$ref'}
+      - name: Links
+        relationships: [{type: has_many, target: HyperLink, via: '$ref'}]
+    identifiers:
+      - {name: bot-id, where: 'path parameter of startSession', note: 'the Einstein Bot to open a session against'}
+      - {name: session-id, where: 'path parameter of continueSession and endSession'}
+      - {name: ExternalSessionKey, note: 'caller-supplied key that ties a bot session to the consumer''s own conversation'}
+      - {name: sequenceId, note: 'monotonic message ordering within a session'}
+      - {name: inReplyToMessageId, note: 'threads a client message to the bot message it answers'}
+      - {name: requestId, note: 'UUID on every error response; the support trace handle'}
+  - name: Service Cloud record model
+    source: >-
+      Object names as exposed by Salesforce's hosted MCP tools and named in the REST API and
+      Object Reference guides. No published static schema; derive per org with
+      GET /services/data/v67.0/sobjects/{SObject}/describe.
+    confidence: names-only
+    entities:
+      - name: Case
+        role: the central Service Cloud record
+        relationships:
+          - {type: has_many, target: CaseComment, via: ParentId}
+          - {type: has_many, target: CaseHistory, via: CaseId}
+          - {type: has_many, target: EmailMessage, via: ParentId}
+          - {type: belongs_to, target: Account, via: AccountId}
+          - {type: belongs_to, target: Contact, via: ContactId}
+          - {type: belongs_to, target: User, via: OwnerId, note: 'OwnerId may also be a Queue (Group) id'}
+          - {type: belongs_to, target: Entitlement, via: EntitlementId}
+        note: >-
+          The Sforce-Auto-Assign request header decides whether assignment rules fire on create —
+          the difference between a quiet API write and a routed, notified, SLA-clocked case.
+      - name: Knowledge__kav
+        role: knowledge article version
+        note: >-
+          Article types are org-specific; the versioned object name carries the __kav suffix and
+          articles move through Draft / Online / Archived publish states.
+      - name: LiveChatTranscript
+        role: record of a Live Agent chat
+      - name: MessagingSession
+        role: record of a Messaging for In-App and Web conversation
+      - name: ServiceAppointment
+        role: field-service work appointment
+      - name: Entitlement
+        role: SLA entitlement attached to an account or asset
+        relationships: [{type: has_many, target: Case, via: EntitlementId}]
+  - name: Event model
+    source: grpc/service-cloud-pubsub-api.proto
+    entities:
+      - name: TopicInfo
+        fields_observed: [topic_name, tenant_guid, can_publish, can_subscribe, schema_id, rpc_id]
+        relationships: [{type: has_one, target: SchemaInfo, via: schema_id}]
+      - name: SchemaInfo
+        note: Carries the Avro schema JSON for a topic. Events are Avro-encoded bytes, not JSON.
+      - name: ProducerEvent / ConsumerEvent
+        note: Wire records carried by Publish/PublishStream and Subscribe/ManagedSubscribe.
+render: null

@@ -1,0 +1,160 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  registry.npmjs.org, pypi.org, search.maven.org, rubygems.org metadata endpoints
+  queried 2026-08-27, plus github.com/forcedotcom and github.com/salesforcecli
+note: >-
+  official:true is reserved for packages published under a Salesforce-controlled namespace
+  (@salesforce/* on npm, com.salesforce.* / com.force.api on Maven Central) or from the
+  forcedotcom / salesforcecli GitHub organizations. Community libraries that wrap the same
+  Salesforce APIs are listed with official:false so a consumer can tell the difference.
+packages:
+  - name: '@salesforce/mcp'
+    registry: npm
+    url: https://www.npmjs.com/package/@salesforce/mcp
+    repository: https://github.com/salesforcecli/mcp
+    language: javascript
+    official: true
+    version: 0.30.15
+    published: '2026-07-09'
+    description: >-
+      Salesforce DX MCP Server. Local stdio MCP server exposing 60+ tools across the orgs,
+      metadata, data, users, testing, devops, mobile and LWC toolsets against an authorized org.
+  - name: '@salesforce/cli'
+    registry: npm
+    url: https://www.npmjs.com/package/@salesforce/cli
+    repository: https://github.com/salesforcecli/cli
+    language: javascript
+    official: true
+    version: 2.149.9
+    published: '2026-08-19'
+    description: The Salesforce CLI (`sf`) — org auth, metadata deploy/retrieve, data and Apex commands.
+  - name: '@salesforce/core'
+    registry: npm
+    url: https://www.npmjs.com/package/@salesforce/core
+    repository: https://github.com/forcedotcom/sfdx-core
+    language: javascript
+    official: true
+    version: 9.1.7
+    published: '2026-08-25'
+    description: Core Node.js libraries for interacting with Salesforce orgs, projects and the API.
+  - name: '@salesforce/sf-plugins-core'
+    registry: npm
+    url: https://www.npmjs.com/package/@salesforce/sf-plugins-core
+    language: javascript
+    official: true
+    version: 13.0.3
+    published: '2026-08-18'
+    description: Shared utilities for authoring Salesforce CLI plugins.
+  - name: com.salesforce.einsteinbot:einstein-bot-sdk-java
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.salesforce.einsteinbot/einstein-bot-sdk-java
+    repository: https://github.com/forcedotcom/einstein-bot-sdk-java
+    language: java
+    official: true
+    version: 3.0.2
+    published: '2025-02-12'
+    description: >-
+      First-party Java SDK for the Einstein Bots Runtime API. Ships the API's OpenAPI documents
+      (v4.0.0 through v5.3.0) under src/main/resources — the source of openapi/service-cloud-einstein-bots-openapi.yml.
+    note: >-
+      DECAY SIGNAL: last release 2025-02-12, roughly 18 months before this pass. The runtime it
+      wraps still advertises v5.3.0 as ACTIVE (probed at /versions), so the SDK is not obviously
+      behind the contract, but it is not tracking Salesforce's 3-release-per-year cadence either.
+  - name: com.salesforce.einsteinbot:einstein-bot-openapi-codegen-maven-plugin
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.salesforce.einsteinbot/einstein-bot-openapi-codegen-maven-plugin
+    repository: https://github.com/forcedotcom/einstein-bot-openapi-codegen-maven-plugin
+    language: java
+    official: true
+    version: 7.10.4
+    published: '2025-02-11'
+    description: OpenAPI Generator plugin that emits the Einstein Bots API client from the published spec.
+  - name: com.force.api:force-wsc
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.force.api/force-wsc
+    repository: https://github.com/forcedotcom/wsc
+    language: java
+    official: true
+    version: 64.0.3
+    published: '2025-05-14'
+    description: >-
+      Web Service Connector — the Salesforce SOAP/WSDL toolkit used to generate and call the
+      Enterprise, Partner, Metadata and Tooling SOAP APIs from Java.
+    note: >-
+      DECAY SIGNAL: version 64.0.3 corresponds to the Summer '25 API version. The current
+      platform API version at the time of this pass is 67.0 (Summer '26, confirmed in the
+      REST API Developer Guide), so the first-party SOAP toolkit is three releases behind
+      the API it wraps.
+  - name: com.force.api:force-partner-api
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.force.api/force-partner-api
+    language: java
+    official: true
+    version: 64.0.3
+    published: '2025-05-14'
+    description: Generated Java client for the Salesforce Partner SOAP API.
+  - name: com.force.api:force-metadata-api
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.force.api/force-metadata-api
+    language: java
+    official: true
+    version: 64.0.3
+    published: '2025-05-14'
+    description: Generated Java client for the Salesforce Metadata SOAP API.
+  - name: com.force.api:force-apex-api
+    registry: maven
+    url: https://central.sonatype.com/artifact/com.force.api/force-apex-api
+    language: java
+    official: true
+    version: 64.0.3
+    published: '2025-05-14'
+    description: Generated Java client for the Salesforce Apex SOAP API.
+  - name: jsforce
+    registry: npm
+    url: https://www.npmjs.com/package/jsforce
+    repository: https://github.com/jsforce/jsforce
+    language: javascript
+    official: false
+    version: 3.10.23
+    published: '2026-08-24'
+    description: >-
+      The de-facto JavaScript client for the Salesforce REST, SOAP, Bulk, Streaming, Metadata
+      and Tooling APIs. Published under the independent `jsforce` GitHub org, not forcedotcom —
+      widely used inside Salesforce tooling but not a Salesforce-published package.
+  - name: simple-salesforce
+    registry: pypi
+    url: https://pypi.org/project/simple-salesforce/
+    repository: https://github.com/simple-salesforce/simple-salesforce
+    language: python
+    official: false
+    version: 1.12.10
+    published: '2026-07-08'
+    description: Community Python client for the Salesforce REST and Bulk APIs.
+  - name: salesforce-cdp-connector
+    registry: pypi
+    url: https://pypi.org/project/salesforce-cdp-connector/
+    language: python
+    official: false
+    version: 1.0.20
+    published: '2026-06-02'
+    description: Python DB-API connector for Salesforce Data Cloud / CDP query.
+  - name: restforce
+    registry: rubygems
+    url: https://rubygems.org/gems/restforce
+    repository: https://github.com/restforce/restforce
+    language: ruby
+    official: false
+    version: 8.0.1
+    published: '2025-12-29'
+    description: Community Ruby client for the Salesforce REST API.
+gaps:
+  - registry: nuget
+    note: >-
+      No first-party Salesforce .NET client found on nuget.org under a Salesforce-controlled
+      namespace; api.nuget.org returned 404 for the candidate id probed. .NET consumers are
+      directed to the SOAP WSDL toolkit or a community client.
+  - registry: pkg.go.dev
+    note: >-
+      No first-party Go SDK. The pub-sub-api repo ships Go SAMPLES generated from
+      grpc/service-cloud-pubsub-api.proto rather than a versioned module.

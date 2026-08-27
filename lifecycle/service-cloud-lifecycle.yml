@@ -1,0 +1,88 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/api_rest_eol.htm,
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest_api_versions.htm,
+  https://status.salesforce.com/ and https://api.status.salesforce.com/v1/instances/status/preview
+  (probed 2026-08-27), and openapi/service-cloud-einstein-bots-openapi.yml
+versioning:
+  scheme: numeric API version in the URL path
+  pattern: /services/data/v{NN}.0/
+  current: '67.0'
+  current_release: "Summer '26"
+  release_number: '262'
+  cadence: three major releases per year (Spring, Summer, Winter); one API version per release
+  evidence:
+    - >-
+      "Summer '26 (API version 67.0)" — REST API Developer Guide version banner, fetched 2026-08-27.
+    - >-
+      api.status.salesforce.com/v1/instances/status/preview reports release 262.x on 1,053 of
+      3,962 instances, the largest cohort, confirming Summer '26 as the live release.
+deprecation:
+  policy: true
+  policy_url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/api_rest_eol.htm
+  support_window: >-
+    "Salesforce is committed to supporting each API version for a minimum of 3 years from the date
+    of first release."
+  notice_period: >-
+    "Salesforce notifies customers who use an API version scheduled for deprecation at least
+    1 year before support for the version ends."
+  supported_versions: 31.0 - 67.0
+  retired:
+    - versions: 21.0 - 30.0
+      retired_in: "Summer '25"
+    - versions: 7.0 - 20.0
+      retired_in: "Summer '22"
+  on_retired_call: >-
+    "410:GONE error code" is returned when a retired API version is called.
+  sunset_headers: false
+  rfc8594: false
+  note: >-
+    Salesforce does NOT emit RFC 8594 Sunset/Deprecation response headers. Deprecation is announced
+    out of band (release notes + direct customer notification) and enforced with a hard 410. An agent
+    cannot discover an impending retirement from the response; it must read the release notes.
+per_api_status:
+  - api: Einstein Bots Runtime API
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    stability: BETA
+    evidence: 'info.title is "Einstein Bots API (BETA)"'
+    versions_endpoint: https://runtime-api-na-west.prod.chatbots.sfdc.sh/versions
+    probed: '2026-08-27'
+    versions:
+      - {version: 4.0.0, status: DEPRECATED}
+      - {version: 5.0.0, status: ACTIVE}
+      - {version: 5.1.0, status: ACTIVE}
+      - {version: 5.2.0, status: ACTIVE}
+      - {version: 5.3.0, status: ACTIVE}
+    note: >-
+      This API self-reports its own version lifecycle at a public unauthenticated /versions endpoint —
+      the only Salesforce surface found in this pass that does so. getAPIVersions is the operationId.
+  - api: Salesforce Pub/Sub API
+    spec: grpc/service-cloud-pubsub-api.proto
+    stability: GA
+    version: 'v1 (package eventbus.v1)'
+  - api: Salesforce Hosted MCP Servers
+    stability: GA
+    note: >-
+      Generally available per github.com/forcedotcom/mcp-hosted. The Headless 360 server is Beta.
+  - api: Streaming API (CometD/Bayeux)
+    stability: GA
+    note: Superseded in practice by the Pub/Sub API for new event integrations.
+deprecated_operations: []
+status_page:
+  url: https://status.salesforce.com/
+  http_status: 200
+  machine_readable: true
+  api: https://api.status.salesforce.com/v1/instances/status/preview
+  api_http_status: 200
+  probed: '2026-08-27'
+  note: >-
+    Salesforce Trust exposes a real JSON status API, not just a status page. The preview endpoint
+    returned 3,962 instances with per-instance status, release version and maintenance state on an
+    anonymous GET — an agent can check whether the specific org's instance is healthy before acting.
+sla:
+  published: false
+  note: >-
+    No public uptime SLA number. Availability commitments are contractual and live in the
+    Master Subscription Agreement at https://www.salesforce.com/company/legal/agreements/.
+release_notes: https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm&type=5

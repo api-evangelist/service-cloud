@@ -1,0 +1,26 @@
+generated: '2026-08-27'
+method: generated
+source: >-
+  openapi/service-cloud-einstein-bots-openapi.yml, mcp/service-cloud-mcp.yml,
+  mcp/service-cloud-tool-crosswalk.yml, conventions/service-cloud-conventions.yml,
+  errors/service-cloud-problem-types.yml, rate-limits/service-cloud-rate-limits.yml
+note: >-
+  No provider-published Agent Skills or AGENTS.md was found on any Salesforce host. These are
+  generated from the contracts and artifacts in this repo; every operationId and every tool name
+  is grepped from a captured artifact, and every quoted window or limit is cited to a Salesforce
+  document in the artifact it came from.
+skills:
+  - name: service-cloud-einstein-bot-session
+    file: service-cloud-einstein-bot-session.md
+    api: Einstein Bots Runtime API v5.3.0
+    grounded_in: openapi/service-cloud-einstein-bots-openapi.yml
+    operations: [checkHealthStatus, getAPIVersions, startSession, continueSession, endSession]
+    summary: Open, drive and close an Einstein Bots conversation, including escalation to a human.
+  - name: service-cloud-case-triage-via-mcp
+    file: service-cloud-case-triage-via-mcp.md
+    api: Salesforce Hosted MCP Servers (SObject family)
+    grounded_in: mcp/service-cloud-mcp.yml
+    tools: [getUserInfo, getObjectSchema, soqlQuery, find, listRecentSobjectRecords, getRelatedRecords, createSobjectRecord, updateSobjectRecord, updateRelatedRecord, deleteSobjectRecord, deleteRelatedRecord]
+    summary: >-
+      Triage and work Service Cloud cases over MCP with the least-privilege server choice, the
+      real idempotency gap, and the 15-day Recycle Bin rule that an agent cannot itself invoke.

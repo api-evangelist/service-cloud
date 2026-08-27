@@ -1,0 +1,136 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://login.salesforce.com/.well-known/openid-configuration (probed 200, 2026-08-27 — saved to
+  well-known/service-cloud-login-openid-configuration.json),
+  https://api.salesforce.com/.well-known/oauth-authorization-server (probed 200),
+  https://api.salesforce.com/.well-known/oauth-protected-resource/platform/mcp/v1/platform/sobject-all (probed 200),
+  and openapi/service-cloud-einstein-bots-openapi.yml
+docs: https://help.salesforce.com/s/articleView?id=platform.remoteaccess_oauth_tokens_scopes.htm&type=5
+note: >-
+  The scope list is READ FROM THE PROVIDER'S OWN DISCOVERY DOCUMENTS, not from prose. Two documents
+  disagree: login.salesforce.com/.well-known/openid-configuration advertises 37 scopes; the
+  api.salesforce.com authorization-server document advertises only 4. Both are recorded.
+schemes:
+  - name: chatbotAuth
+    type: oauth2
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+        tokenUrl: https://login.salesforce.com/services/oauth2/token
+      - flow: implicit
+        authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+    description: chatbotAuth supports authorization code and implicit OAuth flows.
+  - name: jwtBearer
+    type: http
+    scheme: bearer
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    description: >-
+      Salesforce OAuth access token obtained using the JWT Bearer flow. Use the chatbot_api scope
+      with this flow to enable access to the Einstein Bots services.
+scopes:
+  - scope: api
+    description: Access the Salesforce platform APIs (REST, SOAP, Bulk) as the authenticated user. The scope Service Cloud record work runs on.
+    advertised_by: [login.salesforce.com, api.salesforce.com]
+  - scope: mcp_api
+    description: Call the Salesforce hosted MCP servers.
+    advertised_by: [login.salesforce.com, 'api.salesforce.com (per-resource metadata for /platform/mcp/v1/platform/sobject-all)']
+  - scope: chatbot_api
+    description: Access bot APIs — the Einstein Bots Runtime API.
+    advertised_by: [login.salesforce.com, 'openapi/service-cloud-einstein-bots-openapi.yml']
+  - scope: refresh_token
+    description: Issue a refresh token so the client can obtain new access tokens without re-prompting.
+    advertised_by: [login.salesforce.com, api.salesforce.com, 'api.salesforce.com per-resource metadata']
+  - scope: offline_access
+    description: OIDC equivalent of refresh_token.
+    advertised_by: [login.salesforce.com]
+  - scope: sfap_api
+    description: Salesforce AI Platform API access.
+    advertised_by: [login.salesforce.com, api.salesforce.com]
+  - scope: einstein_gpt_api
+    description: Einstein GPT / generative AI platform API access.
+    advertised_by: [login.salesforce.com, api.salesforce.com]
+  - scope: full
+    description: Full access to all data the user can access. Broadest scope; avoid for agent clients.
+    advertised_by: [login.salesforce.com]
+  - scope: openid
+    description: OIDC — issue an ID token.
+    advertised_by: [login.salesforce.com]
+  - scope: id
+    description: Access the identity URL service.
+    advertised_by: [login.salesforce.com]
+  - scope: profile
+    advertised_by: [login.salesforce.com]
+  - scope: email
+    advertised_by: [login.salesforce.com]
+  - scope: address
+    advertised_by: [login.salesforce.com]
+  - scope: phone
+    advertised_by: [login.salesforce.com]
+  - scope: web
+    description: Access to the web UI via the access token.
+    advertised_by: [login.salesforce.com]
+  - scope: lightning
+    description: Access Lightning applications.
+    advertised_by: [login.salesforce.com]
+  - scope: visualforce
+    description: Access Visualforce pages.
+    advertised_by: [login.salesforce.com]
+  - scope: content
+    description: Access Salesforce CRM Content.
+    advertised_by: [login.salesforce.com]
+  - scope: chatter_api
+    description: Access the Connect REST API (Chatter/Connect).
+    advertised_by: [login.salesforce.com]
+  - scope: custom_permissions
+    description: Return the custom permissions in the org associated with the connected app.
+    advertised_by: [login.salesforce.com]
+  - scope: interaction_api
+    description: Interaction Studio / personalization API.
+    advertised_by: [login.salesforce.com]
+  - scope: wave_api
+    description: CRM Analytics (Wave/Tableau CRM) REST API.
+    advertised_by: [login.salesforce.com]
+  - scope: eclair_api
+    description: CRM Analytics Eclair chart API.
+    advertised_by: [login.salesforce.com]
+  - scope: pardot_api
+    description: Account Engagement (Pardot) API.
+    advertised_by: [login.salesforce.com]
+  - scope: scrt_api
+    description: Service Cloud Real-Time (SCRT) — the Messaging for In-App and Web transport.
+    advertised_by: [login.salesforce.com]
+    note: The most Service-Cloud-specific scope in the list.
+  - scope: user_registration_api
+    advertised_by: [login.salesforce.com]
+  - scope: pwdless_login_api
+    description: Passwordless login API.
+    advertised_by: [login.salesforce.com]
+  - scope: forgot_password
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_api
+    description: Data Cloud / CDP API.
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_ingest_api
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_query_api
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_profile_api
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_segment_api
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_identityresolution_api
+    advertised_by: [login.salesforce.com]
+  - scope: cdp_calculated_insight_api
+    advertised_by: [login.salesforce.com]
+  - scope: data_cloud_user_claims
+    advertised_by: [login.salesforce.com]
+scope_count: 36
+least_privilege:
+  note: >-
+    Scopes are coarse. `api` grants everything the authenticated USER can reach — there is no
+    read-only or Case-only scope. Fine-grained restriction is enforced by the org's profile,
+    permission set and sharing rules on that user, not by the token. For agents, the practical
+    least-privilege lever is choosing the narrow hosted MCP server (sobject-reads or
+    sobject-mutations instead of sobject-all) and a purpose-built integration user.

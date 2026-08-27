@@ -1,0 +1,62 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://trust.salesforce.com/, https://compliance.salesforce.com/,
+  https://security.salesforce.com/ and https://api.status.salesforce.com/v1/instances/status/preview
+  (all probed 2026-08-27)
+trust_center:
+  published: true
+  url: https://trust.salesforce.com/
+  http_status: 200
+  title: Salesforce Trust
+  note: >-
+    Salesforce runs three separate public surfaces rather than one trust portal: Trust (live
+    availability and security status), Compliance (the certification document library) and
+    Security (programme and product-security guidance).
+surfaces:
+  - name: Salesforce Trust
+    url: https://trust.salesforce.com/
+    http_status: 200
+    covers: [availability, incident history, maintenance, security advisories]
+  - name: Salesforce Compliance Site
+    url: https://compliance.salesforce.com/
+    http_status: 200
+    covers: [certifications, attestations, audit reports]
+    document_library: https://compliance.salesforce.com/en/documents
+    library_size: >-
+      The document index reports "Showing 1 to 10 of 505 entries" — a 505-document library, gated
+      only by the site's client-side rendering, not by a login.
+  - name: Salesforce Security
+    url: https://security.salesforce.com/
+    http_status: 200
+    covers: [security programme, product security, customer guidance]
+  - name: Salesforce Status
+    url: https://status.salesforce.com/
+    api: https://api.status.salesforce.com/v1/instances/status/preview
+    http_status: 200
+    api_http_status: 200
+    covers: [per-instance live status, release version, maintenance windows]
+certifications:
+  note: >-
+    Only certifications actually observed on the compliance site during this pass are listed.
+    The site renders its document index client-side, so this is a floor, not the full roster —
+    the library holds 505 documents. Nothing here is inferred from Salesforce's reputation.
+  observed:
+    - {name: IRAP, source: 'https://compliance.salesforce.com/en/documents'}
+    - {name: PCI DSS, source: 'https://compliance.salesforce.com/en/documents'}
+    - {name: ACSC Essential 8, source: 'https://compliance.salesforce.com/en/documents'}
+    - {name: ENS, source: 'https://compliance.salesforce.com/ (page text)'}
+  unverified_in_this_pass:
+    - SOC 1 / SOC 2 / SOC 3
+    - ISO 27001 / 27017 / 27018 / 27701
+    - HIPAA
+    - FedRAMP
+  unverified_note: >-
+    Widely reported for Salesforce but NOT read off the compliance site in this pass because the
+    document index is JS-rendered and only the first page resolved. Left unclaimed on purpose.
+privacy:
+  url: https://www.salesforce.com/company/privacy/
+  http_status: 200
+legal:
+  url: https://www.salesforce.com/company/legal/agreements/
+  http_status: 200

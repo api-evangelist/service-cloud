@@ -1,0 +1,166 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/headers.htm,
+  https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_features_records_idempotent.htm,
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_upsert.htm,
+  https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-deletes.html,
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/api_rest_eol.htm,
+  and openapi/service-cloud-einstein-bots-openapi.yml
+auth:
+  style: OAuth 2.0 bearer
+  header: 'Authorization: Bearer <access_token>'
+  flows: [authorization_code (PKCE S256), refresh_token, jwt-bearer, client_credentials]
+  detail: authentication/service-cloud-authentication.yml
+  scopes: scopes/service-cloud-scopes.yml
+idempotency:
+  supported: true
+  mechanism: client-supplied idempotency key
+  header: Idempotency-Key
+  format: UUID v4
+  surface: 'Salesforce UI API — /ui-api/records/{recordId}, methods POST, PATCH and DELETE'
+  retention: >-
+    "auto-expires after 30 days if the same key is reused"
+  replay_behavior: >-
+    "the cached response is returned instead of performing a server data mutation operation";
+    id values remain the same on replay.
+  limits: >-
+    Responses are cached only up to 9 MB. A larger response bypasses idempotency caching without
+    failing, so a retry of a >9 MB mutation CAN duplicate server-side.
+  docs: https://developer.salesforce.com/docs/atlas.en-us.uiapi.meta/uiapi/ui_api_features_records_idempotent.htm
+  secondary_mechanism:
+    name: upsert by external ID
+    pattern: 'PATCH /services/data/v67.0/sobjects/{SObject}/{ExternalIDField}/{ExternalIDValue}'
+    behavior: >-
+      "If the external ID isn't matched, then a new record is created according to the request
+      body. If the external ID is matched one time, then the record is updated according to the
+      request body. If the external ID is matched multiple times, then a 300 error is reported,
+      and the record isn't created or updated."
+    status_codes: {created: 201, updated: 200, ambiguous_match: 300}
+    note: >-
+      Naturally idempotent on the caller's own key. Salesforce does not label it as idempotent in
+      the docs, but repeating the same PATCH with the same external ID cannot create a duplicate.
+    docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_upsert.htm
+  gap: >-
+    The core sObjects REST layer — the layer the hosted MCP tools call — does NOT accept
+    Idempotency-Key. Only UI API does. An agent calling createSobjectRecord through MCP has no
+    idempotency key available to it and must rely on an external ID upsert instead.
+reversibility:
+  grade: verified
+  applies: true
+  surfaces:
+    - operation: deleteSobjectRecord
+      surface: 'MCP (sobject-all, sobject-deletes) and DELETE /services/data/v67.0/sobjects/{SObject}/{id}'
+      reversal: Recycle Bin restore
+      window: 15 days
+      window_quote: >-
+        "Deleted records go to the Recycle Bin and can be recovered in the Salesforce UI for up to
+        15 days — no undelete tool is available through MCP."
+      docs: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-deletes.html
+      caveat: >-
+        The reversal is NOT available to the agent. There is no undelete tool on any hosted MCP
+        server and no REST undelete resource; recovery is a human action in the Salesforce UI, or
+        an Apex `undelete` statement. An agent that deletes cannot itself undo the delete.
+    - operation: deleteRelatedRecord
+      surface: 'MCP (sobject-all, sobject-deletes)'
+      reversal: Recycle Bin restore
+      window: 15 days
+      docs: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-deletes.html
+    - operation: 'Composite request (POST /services/data/v67.0/composite)'
+      surface: REST
+      reversal: automatic rollback of the whole request
+      window: within the request
+      note: >-
+        allOrNone:true makes a composite request atomic — a failure in any subrequest rolls back
+        every preceding one. This is prevention rather than reversal, but it is the strongest
+        undo primitive Salesforce exposes to an API caller.
+      docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_composite_composite.htm
+    - operation: 'updateSobjectRecord / PATCH sobjects/{SObject}/{id}'
+      surface: 'MCP, REST'
+      reversal: none
+      note: >-
+        No undo. Field history tracking, when enabled on the object, records the previous value in
+        the *History object (e.g. CaseHistory) so a prior value can be READ back and re-applied by
+        a second write — but there is no reversal operation and no window.
+    - operation: 'endSession (Einstein Bots)'
+      surface: openapi/service-cloud-einstein-bots-openapi.yml
+      reversal: none
+      note: A bot session cannot be resumed after endSession; start a new session instead.
+  agent_guidance: >-
+    Treat every delete as effectively irreversible FROM THE AGENT'S SEAT even though the org has a
+    15-day Recycle Bin, because no agent-callable reversal exists. Prefer sobject-reads or
+    sobject-mutations over sobject-all when the task does not require deletion — Salesforce ships
+    separate least-privilege MCP servers precisely so the destructive tools can be withheld.
+dry_run_mode:
+  supported: partial
+  note: >-
+    No generic dry-run/preview flag. Two related affordances: composite `allOrNone:true` (atomic,
+    so a failed batch leaves nothing behind), and the sobject-deletes server documenting that
+    deleteSobjectRecord requires "user confirmation" before it fires. Neither is a true simulate.
+pagination:
+  style: cursor (opaque continuation URL)
+  request:
+    header: 'Sforce-Query-Options: batchSize=<n>'
+    note: Controls the number of records per batch on Query resources.
+  response_fields:
+    totalSize: total matching records
+    done: boolean — false when more batches remain
+    nextRecordsUrl: absolute path to the next batch, follow verbatim
+  note: >-
+    Do not construct the next page URL. Follow nextRecordsUrl until done is true. Bulk API 2.0 is
+    the correct surface above roughly 100k records.
+  docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_query.htm
+field_selection:
+  style: SOQL projection
+  note: >-
+    Field selection is the SELECT list of the query, not a sparse-fieldset query parameter. Ask for
+    only the fields needed — Service Cloud orgs routinely carry hundreds of custom fields on Case.
+  describe: 'GET /services/data/v67.0/sobjects/{SObject}/describe returns the field list first.'
+request_headers:
+  - name: Sforce-Auto-Assign
+    purpose: >-
+      Controls whether active assignment rules apply when creating or updating Accounts, Cases or
+      Leads. SERVICE CLOUD CRITICAL — set it deliberately: creating a Case with assignment rules on
+      routes it to a queue and can fire notifications to real agents.
+  - name: Sforce-Call-Options
+    purpose: Client options such as the default namespace prefix; also used to identify the client.
+  - name: Sforce-Duplicate-Rule-Header
+    purpose: Configures duplicate-rule behaviour on create/update/upsert.
+  - name: Sforce-Query-Options
+    purpose: Query batch size.
+  - name: Sforce-Package-Version
+    purpose: Identifies package versions referenced by the client.
+  - name: If-Modified-Since
+    purpose: Conditional request.
+  - name: Accept-Encoding
+    purpose: Response compression.
+  - name: Idempotency-Key
+    purpose: 'UI API only — idempotent POST/PATCH/DELETE on /ui-api/records.'
+response_headers:
+  - name: Sforce-Limit-Info
+    purpose: >-
+      "returned in each request to REST API" — carries the org's API usage against its 24-hour
+      allocation. THIS IS THE RATE-LIMIT SIGNAL; there is no RateLimit-* or X-RateLimit-* header.
+  - name: Warning
+    purpose: >-
+      Returned when warnings exist, "such as deprecated API version usage". This is the only
+      runtime deprecation signal Salesforce emits — there is no RFC 8594 Sunset or Deprecation header.
+  - name: Content-Encoding
+    purpose: Response compression.
+error_envelope:
+  note: See errors/service-cloud-problem-types.yml. Two shapes, neither RFC 9457.
+  einstein_bots: 'flat object with a REQUIRED requestId (UUID) for tracing'
+  platform_rest: 'ARRAY of {message, errorCode, fields}'
+tracing:
+  einstein_bots: requestId — required on every error response, UUID string.
+  platform_rest: >-
+    No documented correlation-id response header. Clients are expected to set Sforce-Call-Options
+    with a client identifier and correlate through the org's Event Monitoring log files.
+versioning:
+  detail: lifecycle/service-cloud-lifecycle.yml
+  in_url: true
+  current: v67.0
+rate_limit_signaling:
+  detail: rate-limits/service-cloud-rate-limits.yml
+  header: Sforce-Limit-Info
+  exhaustion_code: REQUEST_LIMIT_EXCEEDED

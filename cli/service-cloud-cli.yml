@@ -1,0 +1,59 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://registry.npmjs.org/@salesforce/cli/latest (oclif plugin manifest read 2026-08-27),
+  https://github.com/forcedotcom/cli, and
+  https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/
+cli:
+  name: Salesforce CLI
+  binary: sf
+  official: true
+  version: 2.149.9
+  published: '2026-08-19'
+  repository: https://github.com/forcedotcom/cli
+  docs: https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/
+  license_note: Distributed by Salesforce under the @salesforce npm scope.
+install:
+  - method: npm
+    command: npm install --global @salesforce/cli
+  - method: npx
+    command: npx @salesforce/cli
+  - method: installer
+    note: Salesforce also publishes signed macOS (.pkg), Windows (.exe) and Linux (.tar.gz) installers.
+    url: https://developer.salesforce.com/tools/salesforcecli
+topics:
+  note: >-
+    Derived from the oclif `plugins` list in the published package manifest — each @salesforce/plugin-*
+    contributes the matching top-level topic. This is the shipped surface, not a docs summary.
+  groups:
+    - {topic: 'sf org', plugin: '@salesforce/plugin-org', purpose: 'Create, open, list and delete scratch orgs and sandboxes; org display and open.'}
+    - {topic: 'sf org login / logout', plugin: '@salesforce/plugin-auth', purpose: 'Authorize an org (web, JWT, device, SFDX URL) — the prerequisite for the DX MCP Server.'}
+    - {topic: 'sf project', plugin: '@salesforce/plugin-deploy-retrieve', purpose: 'Deploy and retrieve metadata between a DX project and an org.'}
+    - {topic: 'sf apex', plugin: '@salesforce/plugin-apex', purpose: 'Run Apex tests, execute anonymous Apex, tail debug logs.'}
+    - {topic: 'sf data', plugin: '@salesforce/plugin-data', purpose: 'Query (SOQL), create, update, delete and bulk-import records — the Case/Knowledge data path.'}
+    - {topic: 'sf sobject', plugin: '@salesforce/plugin-sobject', purpose: 'Describe and list sObjects.'}
+    - {topic: 'sf schema', plugin: '@salesforce/plugin-schema', purpose: 'Generate and inspect object and field schema.'}
+    - {topic: 'sf api', plugin: '@salesforce/plugin-api', purpose: 'Make an authenticated raw REST call against an org — the fastest way to exercise the Service Cloud REST API.'}
+    - {topic: 'sf limits', plugin: '@salesforce/plugin-limits', purpose: 'Display the org API request limits and remaining allocation.'}
+    - {topic: 'sf agent', plugin: '@salesforce/plugin-agent', purpose: 'Create, test and manage Agentforce agents.'}
+    - {topic: 'sf package', plugin: '@salesforce/plugin-packaging', purpose: 'Create, version and install first- and second-generation packages.'}
+    - {topic: 'sf user', plugin: '@salesforce/plugin-user', purpose: 'Create users and assign permission sets.'}
+    - {topic: 'sf info', plugin: '@salesforce/plugin-info', purpose: 'Release notes and doc lookup.'}
+    - {topic: 'sf settings / config', plugin: '@salesforce/plugin-settings', purpose: 'Read and set CLI configuration.'}
+    - {topic: 'sf template', plugin: '@salesforce/plugin-templates', purpose: 'Generate Apex classes, LWCs, triggers and project scaffolding.'}
+    - {topic: 'sf trust', plugin: '@salesforce/plugin-trust', purpose: 'Verify the signature of a Salesforce-signed CLI plugin.'}
+    - {topic: 'sf marketplace', plugin: '@salesforce/plugin-marketplace', purpose: 'Discover CLI plugins.'}
+key_flows:
+  - name: Authorize an org
+    command: sf org login web --alias my-service-org
+    note: Required before either the CLI or the DX MCP Server can reach the org.
+  - name: Check remaining API allocation
+    command: sf limits api display --target-org my-service-org
+    note: The CLI equivalent of reading the Sforce-Limit-Info response header.
+  - name: Query Service Cloud cases
+    command: sf data query --query "SELECT Id, CaseNumber, Subject, Status FROM Case WHERE IsClosed = false" --target-org my-service-org
+  - name: Raw REST call against the Service Cloud REST API
+    command: sf api request rest /services/data/v67.0/sobjects/Case/describe --target-org my-service-org
+related:
+  mcp: mcp/service-cloud-mcp.yml
+  packages: packages/service-cloud-packages.yml

@@ -1,0 +1,131 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  openapi/service-cloud-einstein-bots-openapi.yml (4xx/5xx responses and the shared Error schema),
+  enriched from https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/errorcodes.htm
+format: vendor-json
+note: >-
+  NOT RFC 9457. Neither Salesforce error envelope uses application/problem+json. The Einstein Bots
+  runtime returns a flat vendor object with a required requestId; the platform REST API returns a
+  JSON ARRAY of {message, errorCode, fields}. Both are documented and stable, but an agent cannot
+  assume `type`/`title`/`detail`.
+envelopes:
+  - surface: Einstein Bots Runtime API
+    media_type: application/json
+    schema: '#/components/schemas/Error'
+    shape:
+      status: integer — HTTP status
+      path: string — request path
+      requestId: string — UUID for request tracing
+      error: string — error class name
+      message: string — exception message
+      timestamp: integer — unix timestamp
+    required: [status, path, requestId, error, message, timestamp]
+    tracing: >-
+      requestId is REQUIRED on every error. It is the trace handle to quote to Salesforce support.
+  - surface: Salesforce Platform REST API (sObjects, Query, Search — the layer the MCP tools sit on)
+    media_type: application/json
+    shape: 'ARRAY of objects: [{ "message": string, "errorCode": string, "fields": [string] }]'
+    docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/errorcodes.htm
+    note: >-
+      errorCode is a stable SCREAMING_SNAKE string (e.g. REQUEST_LIMIT_EXCEEDED, QUERY_TIMEOUT,
+      INVALID_SESSION_ID, MALFORMED_QUERY, REQUIRED_FIELD_MISSING, ENTITY_IS_DELETED). `fields`
+      names the field(s) that failed validation, which is what makes the envelope actionable.
+problem_types:
+  - status: 400
+    name: BadRequestError
+    title: Bad Request
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: Validate the request body against the spec's schemas before retrying; not retryable as-is.
+  - status: 401
+    name: UnauthorizedError
+    title: Access bearer token is missing or invalid
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: >-
+      Re-mint the token. Einstein Bots accepts a Salesforce OAuth access token from the JWT Bearer
+      flow with the chatbot_api scope. See authentication/service-cloud-authentication.yml.
+    retryable: after-reauth
+  - status: 403
+    name: ForbiddenError
+    title: User forbidden from accessing the resource
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: The authenticated user lacks permission on the bot. Fix the permission set, do not retry.
+  - status: 404
+    name: NotFoundError
+    title: Resource not found
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: The bot-id or session-id does not exist, or the session has already ended.
+  - status: 422
+    name: RequestProcessingException
+    title: Any exception that occurred during the request execution
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: Semantically invalid request the runtime accepted but could not process. Inspect message.
+  - status: 423
+    name: NotAvailableError
+    title: Resource not available at the time of the request
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: The bot or session is locked. Back off and retry.
+    retryable: true
+  - status: 429
+    name: TooManyRequestsError
+    title: Too many requests for the server to handle
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: Back off exponentially. See rate-limits/service-cloud-rate-limits.yml.
+    retryable: true
+  - status: 503
+    name: ServiceUnavailable
+    title: Service is unavailable possibly because Apex or Flow calls timed out
+    operations: [startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+    remediation: >-
+      A bot dialog invoked Apex or Flow that timed out. Retry with backoff; if persistent the
+      failure is in the org's automation, not the API.
+    retryable: true
+  - status: 500
+    name: ServerBusyError
+    title: Server is busy and cannot process the request at this time
+    source: 'openapi/service-cloud-einstein-bots-openapi.yml (components.responses.ServerBusyError)'
+    note: Declared in components.responses but not referenced by any operation in v5.3.0.
+    retryable: true
+  - status: default
+    name: ErrorResponse
+    title: Something went wrong
+    operations: [checkHealthStatus, getAPIVersions, startSession, continueSession, endSession]
+    source: openapi/service-cloud-einstein-bots-openapi.yml
+platform_error_codes:
+  docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/errorcodes.htm
+  note: >-
+    Salesforce publishes a full REST API error-code registry. The codes below are the ones an
+    agent driving Service Cloud records will actually hit; they are named in Salesforce's own
+    limits and error documentation, which is the source cited. The registry itself is large and
+    is not copied here.
+  codes:
+    - code: REQUEST_LIMIT_EXCEEDED
+      status: 403
+      meaning: >-
+        The org's 24-hour API request allocation, or the concurrent long-running request limit,
+        has been exhausted.
+      action: Stop. Read the Sforce-Limit-Info response header for remaining allocation before retrying.
+      source: https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
+    - code: QUERY_TIMEOUT
+      status: 400
+      meaning: A REST API query exceeded the server-side timeout.
+      action: Narrow the SOQL, add selective filters, or move to the Bulk API.
+    - code: REQUEST_RUNNING_TOO_LONG
+      meaning: A SOAP API request exceeded the server-side timeout.
+      action: Same remediation as QUERY_TIMEOUT.
+    - code: 410
+      status: 410
+      name: retired-api-version
+      meaning: >-
+        The requested API version has been retired. Salesforce returns "410:GONE" for versions
+        7.0-20.0 (retired Summer '22) and 21.0-30.0 (retired Summer '25).
+      action: Move the base URL to a supported version (31.0-67.0). See lifecycle/service-cloud-lifecycle.yml.
+      source: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/api_rest_eol.htm

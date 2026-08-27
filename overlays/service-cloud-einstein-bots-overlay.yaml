@@ -1,0 +1,97 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enrichment overlay — Salesforce Einstein Bots Runtime API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-27'
+  method: generated
+  source: openapi/service-cloud-einstein-bots-openapi.yml
+  extends: openapi/service-cloud-einstein-bots-openapi.yml
+  note: >-
+    Captures API Evangelist enrichment WITHOUT mutating the verbatim Salesforce spec. Every value
+    here is drawn from an artifact in this repo or from a Salesforce document cited in one; nothing
+    is invented. Apply with an Overlay 1.0.0 processor.
+actions:
+  - target: $.info
+    update:
+      x-provider: Salesforce
+      x-product: Service Cloud — Einstein Bots
+      x-stability: beta
+      x-spec-origin: https://github.com/forcedotcom/einstein-bot-sdk-java/blob/master/src/main/resources/v5_3_0_api_specs.yml
+      x-versions-endpoint: https://runtime-api-na-west.prod.chatbots.sfdc.sh/versions
+      x-api-evangelist-artifacts:
+        authentication: authentication/service-cloud-authentication.yml
+        scopes: scopes/service-cloud-scopes.yml
+        errors: errors/service-cloud-problem-types.yml
+        conventions: conventions/service-cloud-conventions.yml
+        lifecycle: lifecycle/service-cloud-lifecycle.yml
+        rate_limits: rate-limits/service-cloud-rate-limits.yml
+        mcp: mcp/service-cloud-mcp.yml
+        crosswalk: mcp/service-cloud-tool-crosswalk.yml
+  - target: $.info
+    update:
+      contact:
+        name: Salesforce Developers
+        url: https://developer.salesforce.com
+        email: developer@salesforce.com
+      termsOfService: https://www.salesforce.com/company/legal/agreements/
+      license:
+        name: Salesforce Master Subscription Agreement
+        url: https://www.salesforce.com/company/legal/agreements/
+    x-note: >-
+      The published spec carries no contact, termsOfService or license. These are Salesforce's own
+      published pages (both probed 200 on 2026-08-27), not invented values.
+  - target: $.paths['/v5.3.0/bots/{bot-id}/sessions'].post
+    update:
+      x-agentic-access:
+        action-class: create
+        consequence: >-
+          Opens a billable bot conversation session and may enqueue a live-agent escalation.
+        reversible: false
+        reversal-note: A session cannot be un-started; call endSession to close it.
+        escalation: none
+      x-idempotency:
+        supported: false
+        note: >-
+          No Idempotency-Key on this surface. ExternalSessionKey in the InitMessageEnvelope is the
+          caller's own correlation key and does NOT deduplicate a repeated startSession.
+  - target: $.paths['/v5.3.0/sessions/{session-id}/messages'].post
+    update:
+      x-agentic-access:
+        action-class: update
+        consequence: Sends a message into a live bot conversation a human may be reading.
+        reversible: false
+      x-ordering:
+        note: sequenceId must increase monotonically within a session; inReplyToMessageId threads replies.
+  - target: $.paths['/v5.3.0/sessions/{session-id}'].delete
+    update:
+      x-agentic-access:
+        action-class: delete
+        consequence: Ends the bot session. Any in-flight escalation is abandoned.
+        reversible: false
+        reversal-note: >-
+          No resume. Per conventions/service-cloud-conventions.yml the only recourse is a new
+          startSession, which loses conversation state.
+  - target: $.paths['/status'].get
+    update:
+      x-agentic-access:
+        action-class: read
+        consequence: none
+        reversible: true
+      x-unauthenticated: true
+      x-note: 'Verified anonymous: GET https://runtime-api-na-west.prod.chatbots.sfdc.sh/status → 200 {"status":"UP"} on 2026-08-27.'
+  - target: $.paths['/versions'].get
+    update:
+      x-agentic-access:
+        action-class: read
+        consequence: none
+        reversible: true
+      x-unauthenticated: true
+      x-note: >-
+        Verified anonymous on 2026-08-27; returns 4.0.0 DEPRECATED and 5.0.0-5.3.0 ACTIVE. This is
+        the version-lifecycle discovery endpoint an agent should call before pinning a path version.
+  - target: $.servers
+    update:
+      x-note: >-
+        Six regional hosts on Salesforce's prod.chatbots.sfdc.sh operational domain. Pick the region
+        the org resides in; there is no global anycast host.

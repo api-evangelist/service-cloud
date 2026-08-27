@@ -1,0 +1,63 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm&type=5 (probed 200),
+  https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest_api_versions.htm,
+  and https://api.status.salesforce.com/v1/instances/status/preview (probed 2026-08-27)
+changelog:
+  published: true
+  url: https://help.salesforce.com/s/articleView?id=release-notes.salesforce_release_notes.htm&type=5
+  http_status: 200
+  form: >-
+    Salesforce publishes RELEASE NOTES per major release rather than a rolling dated changelog.
+    Each release note set carries an "API" section listing new and changed REST/SOAP/Bulk resources
+    and the objects added or changed, and a "Deprecated" section.
+  scheme: 'three named releases per year (Spring, Summer, Winter), one API version each'
+  current_version: '67.0'
+  current_release: "Summer '26"
+  note: >-
+    There is no machine-readable changelog feed. The closest machine surface is
+    api.status.salesforce.com, which reports the release version running on each of 3,962 instances —
+    an agent can learn which release an org is ON, but not what changed in it, without reading prose.
+entries:
+  - version: '67.0'
+    release: "Summer '26"
+    release_number: '262'
+    status: current
+    evidence: >-
+      "Summer '26 (API version 67.0)" in the REST API Developer Guide version banner; release 262.x
+      observed on 1,053 instances via the Trust status API on 2026-08-27.
+  - version: '66.0'
+    release: "Spring '26"
+    status: supported
+  - version: '65.0'
+    release: "Winter '26"
+    status: supported
+  - version: '64.0'
+    release: "Summer '25"
+    status: supported
+    note: >-
+      The version the first-party SOAP toolkit on Maven Central (com.force.api:force-wsc 64.0.3)
+      is still pinned to.
+  - versions: '31.0 - 63.0'
+    status: supported
+    note: 'Supported per the API end-of-life policy: minimum 3 years of support per version.'
+  - versions: '21.0 - 30.0'
+    status: retired
+    retired_in: "Summer '25"
+    behavior: returns "410:GONE"
+  - versions: '7.0 - 20.0'
+    status: retired
+    retired_in: "Summer '22"
+    behavior: returns "410:GONE"
+  - api: Einstein Bots Runtime API
+    versions:
+      - {version: '5.3.0', status: ACTIVE}
+      - {version: '5.2.0', status: ACTIVE}
+      - {version: '5.1.0', status: ACTIVE}
+      - {version: '5.0.0', status: ACTIVE}
+      - {version: '4.0.0', status: DEPRECATED}
+    evidence: 'GET https://runtime-api-na-west.prod.chatbots.sfdc.sh/versions → 200, probed 2026-08-27'
+    note: The only Salesforce surface found that publishes its own version lifecycle as live JSON.
+related:
+  lifecycle: lifecycle/service-cloud-lifecycle.yml

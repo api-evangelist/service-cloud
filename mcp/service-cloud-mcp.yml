@@ -1,0 +1,148 @@
+generated: '2026-08-27'
+method: probed
+source: >-
+  https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-all.html
+  and .../sobject-deletes.html (endpoints + tool lists quoted verbatim from Salesforce's own
+  reference pages), https://github.com/forcedotcom/mcp-hosted, https://github.com/salesforcecli/mcp,
+  and live anonymous probes of the endpoints on 2026-08-27.
+name: Salesforce Hosted MCP Servers + Salesforce DX MCP Server
+status: published
+deployment:
+  mode: both
+  endpoint: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+  install: npx -y @salesforce/mcp --orgs DEFAULT_TARGET_ORG --toolsets orgs,metadata,data,users
+  package: https://www.npmjs.com/package/@salesforce/mcp
+  auth: oauth
+  verified: probed
+verification:
+  remote:
+    url: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    response: '{"errors":[{"message":"JWT Token is required"}]}'
+    conclusion: >-
+      The endpoint exists and is auth-gated. tools/list could not be called anonymously, so the
+      tool inventory below is taken from Salesforce's published server reference pages, not from
+      a live introspection. Input schemas require an authenticated introspection.
+  protected_resource_metadata:
+    url: https://api.salesforce.com/.well-known/oauth-protected-resource/platform/mcp/v1/platform/sobject-all
+    http_status: 200
+    resource: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+    authorization_servers:
+      - https://login.salesforce.com
+    scopes_supported: [mcp_api, refresh_token]
+    caveat: >-
+      CALIBRATION: this metadata path is a wildcard generator. A deliberately bogus server name
+      (.../platform/totally-bogus-xyz) also returned 200 with a matching `resource` field, and the
+      MCP POST returns the same 401 for a bogus name because auth is checked before routing.
+      A 200 here is therefore NOT proof that a given server exists. Only servers named on
+      Salesforce's own reference pages are recorded as real below.
+  authorization_server:
+    url: https://api.salesforce.com/.well-known/oauth-authorization-server
+    http_status: 200
+    issuer: https://login.salesforce.com
+    scopes_supported: [api, sfap_api, refresh_token, einstein_gpt_api]
+    code_challenge_methods_supported: [S256]
+    grant_types_supported: [authorization_code, refresh_token]
+    dynamic_client_registration: false
+servers:
+  - name: SObject All
+    endpoint: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+    sandbox_endpoint: https://api.salesforce.com/platform/mcp/v1/sandbox/platform/sobject-all
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-all.html
+    probed_status: 401
+    tools:
+      - name: getObjectSchema
+        description: Retrieves Salesforce schema information for LLM use, with compact indexing or detailed field-level specifics.
+      - name: soqlQuery
+        description: Executes SOQL queries to retrieve Salesforce records with filtering, sorting and relationship traversal.
+      - name: find
+        description: Performs text search across multiple Salesforce objects simultaneously with relevance ranking.
+      - name: getUserInfo
+        description: Returns the authenticated user's identity, role, profile and timezone context.
+      - name: listRecentSobjectRecords
+        description: Fetches recently viewed or modified records of a specified object type.
+      - name: getRelatedRecords
+        description: Retrieves child records connected to a parent through defined relationships.
+      - name: createSobjectRecord
+        description: Creates new Salesforce records with field validation and permission checks.
+      - name: updateSobjectRecord
+        description: Modifies existing records by ID with selective field updates.
+      - name: updateRelatedRecord
+        description: Updates child records via parent relationship navigation.
+      - name: deleteSobjectRecord
+        description: Permanently removes records by ID; recycle-bin recovery available for 15 days.
+      - name: deleteRelatedRecord
+        description: Deletes child records through parent relationship paths.
+  - name: SObject Deletes
+    endpoint: https://api.salesforce.com/platform/mcp/v1/platform/sobject-deletes
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-deletes.html
+    probed_status: 401
+    tools:
+      - name: getObjectSchema
+      - name: soqlQuery
+      - name: find
+      - name: deleteSobjectRecord
+        description: Permanently deletes a record by ID with user confirmation required.
+      - name: deleteRelatedRecord
+        description: Deletes a child record by navigating from a parent through a relationship.
+    reversibility_note: >-
+      Quoted verbatim from the reference page: "Deleted records go to the Recycle Bin and can be
+      recovered in the Salesforce UI for up to 15 days — no undelete tool is available through MCP."
+  - name: SObject Reads
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-reads.html
+    note: >-
+      Documented by Salesforce as a read/query-only server. Endpoint follows the same
+      /platform/mcp/v1/platform/<server> pattern; not independently verified anonymously
+      because auth is enforced before routing.
+  - name: SObject Mutations
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-mutations.html
+    note: Documented by Salesforce as create/update only. Endpoint not independently verifiable anonymously.
+  - name: Data 360
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/data360-mcp.html
+    note: Query unified customer data. Endpoint not independently verifiable anonymously.
+  - name: Headless 360 (Beta)
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/headless-360-mcp.html
+    note: Access Salesforce Setup and platform capabilities. Beta.
+  - name: Tableau Next
+    source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/tableau-next.html
+    note: Discover semantic models and query KPIs.
+local_server:
+  name: Salesforce DX MCP Server
+  package: '@salesforce/mcp'
+  version: 0.30.15
+  published: '2026-07-09'
+  repository: https://github.com/salesforcecli/mcp
+  issues: https://github.com/forcedotcom/mcp/issues
+  docs: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_mcp.htm
+  transport: stdio
+  auth: >-
+    Orgs must be pre-authorized on the developer's machine with `sf org login web` before the
+    server can reach them; the server does not run its own OAuth flow.
+  toolsets:
+    - {name: core, description: 'Always enabled. get_username, resume_tool_operation.'}
+    - {name: data, description: 'run_soql_query.'}
+    - {name: orgs, description: Manage authorized orgs.}
+    - {name: metadata, description: Deploy and retrieve metadata to and from an org and a DX project.}
+    - {name: users, description: Manage org users, assign permission sets.}
+    - {name: testing, description: Test code and features.}
+    - {name: devops, description: Read, manage and operate DevOps Center resources.}
+    - {name: code-analysis, description: Salesforce Code Analyzer static analysis.}
+    - {name: lwc-experts, description: Lightning Web Component development, testing, optimization.}
+    - {name: aura-experts, description: Aura component analysis, blueprinting and LWC migration.}
+    - {name: experts-validation, description: Validate and score LWC components for production readiness.}
+    - {name: mobile, description: Mobile development capabilities.}
+    - {name: mobile-core, description: Essential subset of the mobile toolset.}
+    - {name: enrichment, description: 'Enrich metadata components in a DX project (NON-GA).'}
+    - {name: scale-products, description: Detect and fix Apex performance problems.}
+    - {name: all, description: Every tool in every toolset — 60+ tools.}
+  note: >-
+    This is a DEVELOPER-TOOLING server (org administration, metadata, deploys, code analysis),
+    not a Service Cloud runtime surface. The runtime agent surface for Service Cloud data is the
+    hosted SObject servers above.
+service_cloud_relevance: >-
+  The hosted SObject servers reach every standard and custom object in an org, which is how an
+  agent works Service Cloud records: Case, CaseComment, CaseHistory, Knowledge__kav, LiveChatTranscript,
+  MessagingSession, ServiceAppointment, Entitlement and the rest. There is no Service-Cloud-specific
+  hosted server; Service Cloud is addressed through the generic SObject tools plus SOQL.

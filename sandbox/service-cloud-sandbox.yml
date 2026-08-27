@@ -1,0 +1,59 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-all.html
+  (sandbox MCP endpoint quoted verbatim), https://test.salesforce.com/ (probed 200, 2026-08-27),
+  https://developer.salesforce.com/signup, and
+  https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
+published: true
+model: >-
+  Salesforce does not ship test-mode API KEYS. Isolation is achieved with a SEPARATE ORG — a
+  sandbox, a scratch org or a free Developer Edition — reached through a different login host.
+  There is no test/live key prefix to inspect; the environment is determined entirely by which
+  org the OAuth token was minted against.
+environments:
+  - name: Production
+    login_host: https://login.salesforce.com
+    my_domain_pattern: https://{MyDomainName}.my.salesforce.com
+    api_base: https://{MyDomainName}.my.salesforce.com/services/data/v67.0
+  - name: Sandbox
+    login_host: https://test.salesforce.com
+    probed_status: 200
+    my_domain_pattern: https://{MyDomainName}--{SandboxName}.sandbox.my.salesforce.com
+    api_base: https://{MyDomainName}--{SandboxName}.sandbox.my.salesforce.com/services/data/v67.0
+    note: >-
+      A sandbox is a copy of a production org. Sandbox types are Developer, Developer Pro,
+      Partial Copy and Full; only Full carries production data volume.
+    api_allocation: 'Full Sandbox: "5,000,000" API requests per 24 hours.'
+  - name: Scratch org
+    note: >-
+      Ephemeral, source-driven org created from a project definition. Created with
+      `sf org create scratch`; the standard target for CI and for testing metadata changes.
+  - name: Developer Edition
+    signup: https://developer.salesforce.com/signup
+    price: free
+    api_allocation: '"15,000" API requests per 24 hours; 5 concurrent long-running requests.'
+    note: >-
+      The practical free tier for anyone building against the Service Cloud APIs. Salesforce's own
+      responsible-disclosure policy directs security researchers to test against these instances.
+mcp_sandbox:
+  endpoint: https://api.salesforce.com/platform/mcp/v1/sandbox/platform/sobject-all
+  source: https://developer.salesforce.com/docs/platform/hosted-mcp-servers/references/reference/sobject-all.html
+  note: >-
+    The hosted MCP servers expose a distinct /sandbox/ path segment. Pointing an agent at the
+    sandbox endpoint is how you rehearse a destructive Service Cloud workflow without touching
+    production records — the single most useful sandbox affordance for agent work in this repo.
+test_data:
+  fixtures: false
+  magic_values: false
+  note: >-
+    No published magic identifiers, test card numbers or trigger values. Test data is seeded by the
+    consumer, either from a sandbox copy of production or with `sf data import tree` / the Bulk API.
+  seeding:
+    - command: sf org create scratch --definition-file config/project-scratch-def.json
+    - command: sf data import tree --plan data/Case-plan.json
+time_simulation:
+  supported: false
+  note: >-
+    No test clock. Entitlement and milestone timing in Service Cloud cannot be fast-forwarded from
+    the API; a sandbox's business hours and entitlement processes must be edited to rehearse SLA behaviour.

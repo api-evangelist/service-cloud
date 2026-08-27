@@ -1,0 +1,128 @@
+# Salesforce Service Cloud APIs
+
+> Salesforce Service Cloud is the customer-service and contact-centre product on the Salesforce
+> Platform. Its API surface is the Salesforce Platform API applied to service objects — Case,
+> Knowledge, chat and messaging transcripts, omni-channel routing, entitlements — plus a small
+> number of purpose-built runtimes (Einstein Bots, Pub/Sub events) that ship their own contracts.
+> There is no single "Service Cloud API" host: every call is made against the customer's own org
+> at the instance_url the OAuth token returns.
+
+Generated: 2026-08-27
+Method: generated (no /llms.txt is served by any Salesforce host; www.salesforce.com/llms.txt 302s
+to the marketing site and developer.salesforce.com returns 403 to non-browser clients)
+Source: this repository's artifacts, each of which cites the Salesforce document it came from.
+
+## Start here
+
+- Developer portal: https://developer.salesforce.com/
+- REST API Developer Guide: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
+- Authentication: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
+- Free Developer Edition org (the practical free tier): https://developer.salesforce.com/signup
+- Service Cloud pricing: https://www.salesforce.com/service/pricing/
+
+## Base URL
+
+There is no global API host. The base is the org's own My Domain, returned as `instance_url`
+in the OAuth token response:
+
+    https://{MyDomainName}.my.salesforce.com/services/data/v67.0
+
+Sandboxes use `https://{MyDomainName}--{SandboxName}.sandbox.my.salesforce.com/...` and log in at
+test.salesforce.com. API version 67.0 corresponds to the Summer '26 release.
+
+## Contracts this repo holds
+
+- openapi/service-cloud-einstein-bots-openapi.yml — Einstein Bots Runtime API v5.3.0, OpenAPI 3.0.0,
+  5 operations, 51 schemas. Captured verbatim from Salesforce's own forcedotcom/einstein-bot-sdk-java
+  repository. Live and anonymously verifiable: GET https://runtime-api-na-west.prod.chatbots.sfdc.sh/status
+  returns {"status":"UP"}.
+- grpc/service-cloud-pubsub-api.proto — Salesforce Pub/Sub API, proto3, package eventbus.v1,
+  service PubSub with 6 RPCs (Subscribe, ManagedSubscribe, Publish, PublishStream, GetSchema, GetTopic).
+  Captured verbatim from forcedotcom/pub-sub-api.
+
+## What is NOT published
+
+- No static OpenAPI for the core sObjects/Query/Search REST layer. An org can generate an OAS 3.0
+  document for its own objects at /services/data/v67.0/async/specifications/oas3, but that requires
+  an authenticated session and the result is org-specific.
+- No AsyncAPI for any event surface.
+- No publicly fetchable WSDL. https://login.salesforce.com/soap/wsdl.jsp?type=* 302s to the login
+  page; the Enterprise and Partner WSDLs are downloaded from inside an org's Setup.
+- No /llms.txt, no /.well-known/security.txt, no /.well-known/api-catalog, no A2A agent card on any
+  Salesforce host probed on 2026-08-27.
+
+## Agent surfaces
+
+Salesforce Hosted MCP Servers (GA) — remote, OAuth-gated:
+
+    https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+    https://api.salesforce.com/platform/mcp/v1/sandbox/platform/sobject-all
+
+Least-privilege siblings: sobject-reads, sobject-mutations, sobject-deletes. Product servers:
+data-360, headless-360 (beta), tableau-next. Scope: mcp_api. Protected-resource metadata at
+https://api.salesforce.com/.well-known/oauth-protected-resource/platform/mcp/v1/platform/sobject-all
+
+SObject All tools: getObjectSchema, soqlQuery, find, getUserInfo, listRecentSobjectRecords,
+getRelatedRecords, createSobjectRecord, updateSobjectRecord, updateRelatedRecord,
+deleteSobjectRecord, deleteRelatedRecord.
+
+Salesforce DX MCP Server (local stdio, developer tooling not runtime):
+
+    npx -y @salesforce/mcp --orgs DEFAULT_TARGET_ORG --toolsets orgs,metadata,data,users
+
+## Authentication
+
+OAuth 2.0 only — Salesforce issues no API keys. Discovery:
+https://login.salesforce.com/.well-known/openid-configuration (37 scopes, registration_endpoint,
+introspection_endpoint, private_key_jwt). Flows: authorization code with PKCE (S256), refresh token,
+JWT bearer, client credentials, device. Key scopes: `api` (platform APIs), `mcp_api` (hosted MCP),
+`chatbot_api` (Einstein Bots), `scrt_api` (Messaging for In-App and Web), `full` (avoid).
+
+Note a divergence: https://api.salesforce.com/.well-known/oauth-authorization-server advertises only
+4 scopes and no registration endpoint. The login host is the complete document.
+
+## Runtime semantics an agent must know
+
+- Rate limiting is a rolling 24-hour ORG allocation, not a per-second rate. The signal is the
+  `Sforce-Limit-Info` response header. There is no RateLimit-*, X-RateLimit-* or Retry-After.
+  Exhaustion is `REQUEST_LIMIT_EXCEEDED` (403) and is a hard stop for the window.
+- Idempotency: `Idempotency-Key` (UUID v4) works on UI API /ui-api/records for POST/PATCH/DELETE,
+  30-day retention, 9 MB response cap. It does NOT work on the sObjects layer the MCP tools call.
+  Use an external-ID upsert (PATCH /sobjects/{obj}/{extIdField}/{value}) for repeatable writes.
+- Reversibility: deleted records sit in the Recycle Bin and are recoverable for 15 days — but only
+  by a human in the Salesforce UI. No undelete tool exists on any hosted MCP server and no REST
+  undelete resource is exposed. From an agent's seat, delete is irreversible.
+- Pagination: cursor. Read `done`; follow `nextRecordsUrl` verbatim.
+- Errors: two shapes, neither RFC 9457. Einstein Bots returns a flat object with a required
+  `requestId`; the platform REST API returns an ARRAY of {message, errorCode, fields}.
+- Deprecation: each API version is supported at least 3 years with at least 1 year of notice.
+  Versions 31.0-67.0 are supported; 21.0-30.0 retired in Summer '25 and 7.0-20.0 in Summer '22,
+  and calling one returns 410. There is no RFC 8594 Sunset header — a deprecated version is
+  signalled with the generic HTTP `Warning` response header.
+- Service Cloud gotcha: the `Sforce-Auto-Assign` request header decides whether assignment rules
+  fire on Case create/update. On, and your API write routes the case to a queue and notifies people.
+
+## Artifacts in this repository
+
+- apis.yml — the API Commons index for this provider
+- openapi/ — Einstein Bots Runtime API v5.3.0
+- grpc/ — Pub/Sub API protobuf
+- mcp/ — MCP server manifest + REST/MCP/gRPC tool crosswalk
+- authentication/, scopes/ — OAuth model read from the provider's discovery documents
+- conventions/ — idempotency, pagination, headers, reversibility
+- errors/ — problem types and platform error codes
+- lifecycle/ — versioning, deprecation, status page
+- rate-limits/, plans/ — published limits and Service Cloud editions
+- security/ — domain security probe, responsible disclosure, trust centres
+- conformance/ — standards this API does and does not implement
+- sandbox/, changelog/, cli/, data-model/, asyncapi/, packages/, well-known/, overlays/, skills/
+
+## Support and legal
+
+- Help: https://help.salesforce.com/
+- Status: https://status.salesforce.com/ (JSON: https://api.status.salesforce.com/v1/instances/status/preview)
+- Trust: https://trust.salesforce.com/ | Compliance: https://compliance.salesforce.com/
+- Responsible disclosure: https://www.salesforce.com/company/disclosure/ (submit at https://sfdc.co/SubmitVuln)
+- Terms: https://www.salesforce.com/company/legal/agreements/
+- Privacy: https://www.salesforce.com/company/privacy/
+- GitHub: https://github.com/forcedotcom

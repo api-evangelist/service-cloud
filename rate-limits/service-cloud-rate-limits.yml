@@ -1,128 +1,110 @@
-specification: API Commons Rate Limits
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm
+  and https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/headers.htm
+  (fetched 2026-08-27). Replaces the 2026-05-04 generated scaffold, whose per-minute quotas and
+  X-RateLimit-* headers were never Salesforce's model.
 provider: Salesforce Service Cloud APIs
 providerId: service-cloud
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - Cloud
-  - CRM
-  - Customer-Service
-  - Enterprise
-  - Salesforce
-  - Support
-  - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Salesforce Service Cloud APIs API surface.
-  Captures per-tier quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold
-  values to be replaced with published provider limits.
+description: >-
+  Salesforce meters the platform API by a rolling 24-hour REQUEST ALLOCATION per ORG, computed from
+  the org's edition and its purchased licences — not by a per-key requests-per-second rate. There is
+  no burst window and no per-endpoint limit. The runtime signal is the Sforce-Limit-Info response
+  header, returned on every REST call.
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+  salesforce: Sforce-Limit-Info
+  note: >-
+    Salesforce does NOT emit RateLimit-*, X-RateLimit-* or Retry-After. It emits a single
+    Sforce-Limit-Info response header "returned in each request to REST API" carrying the org's
+    consumption against its 24-hour allocation. An agent that watches only the RFC-draft headers
+    will see no rate-limit signal at all from this API.
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+  throttled: 403
+  quotaExceeded: 403
+  quotaExceededCode: REQUEST_LIMIT_EXCEEDED
+  queryTimeout: 400
+  queryTimeoutCode: QUERY_TIMEOUT
+  soapTimeoutCode: REQUEST_RUNNING_TOO_LONG
+  note: >-
+    Exhaustion surfaces as REQUEST_LIMIT_EXCEEDED, not as HTTP 429. The Einstein Bots runtime is
+    the exception: it does return 429 TooManyRequestsError (see the spec).
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Service Cloud REST API
-      - Service Cloud Case Management API
-      - Service Cloud Knowledge API
-      - Service Cloud Omni-Channel API
-      - Service Cloud Live Agent API
-      - Service Cloud Einstein Bots API
-      - Service Cloud Streaming API
-      - Service Cloud CTI API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Service Cloud REST API
-      - Service Cloud Case Management API
-      - Service Cloud Knowledge API
-      - Service Cloud Omni-Channel API
-      - Service Cloud Live Agent API
-      - Service Cloud Einstein Bots API
-      - Service Cloud Streaming API
-      - Service Cloud CTI API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Service Cloud REST API
-      - Service Cloud Case Management API
-      - Service Cloud Knowledge API
-      - Service Cloud Omni-Channel API
-      - Service Cloud Live Agent API
-      - Service Cloud Einstein Bots API
-      - Service Cloud Streaming API
-      - Service Cloud CTI API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Service Cloud REST API
-      - Service Cloud Case Management API
-      - Service Cloud Knowledge API
-      - Service Cloud Omni-Channel API
-      - Service Cloud Live Agent API
-      - Service Cloud Einstein Bots API
-      - Service Cloud Streaming API
-      - Service Cloud CTI API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Service Cloud REST API
-      - Service Cloud Case Management API
-      - Service Cloud Knowledge API
-      - Service Cloud Omni-Channel API
-      - Service Cloud Live Agent API
-      - Service Cloud Einstein Bots API
-      - Service Cloud Streaming API
-      - Service Cloud CTI API
+  - tier: Developer Edition
+    name: Total API requests per 24 hours
+    scope: org
+    metric: requests
+    limit: 15000
+    timeFrame: 24h
+    quote: '"15,000" total calls'
+  - tier: Enterprise / Professional (with API access)
+    name: Total API requests per 24 hours
+    scope: org
+    metric: requests
+    limit: null
+    formula: >-
+      "100,000 + (number of licenses x calls per license type) + purchased API Call Add-Ons"
+    timeFrame: 24h
+    per_license:
+      Salesforce: 1000
+      'Salesforce Platform': 1000
+      'Lightning Platform - One App': 200
+      'External Identity 25,000': 70000
+      'External Identity 250,000': 750000
+      'External Identity 1,000,000': 4000000
+  - tier: Unlimited / Performance
+    name: Total API requests per 24 hours
+    scope: org
+    metric: requests
+    limit: null
+    formula: Same base formula as Enterprise, with higher per-licence rates.
+    timeFrame: 24h
+    per_license:
+      Salesforce: 5000
+      'Salesforce Platform': 5000
+  - tier: Full Sandbox
+    name: Total API requests per 24 hours
+    scope: org
+    metric: requests
+    limit: 5000000
+    timeFrame: 24h
+    quote: '"5,000,000"'
+  - tier: Developer Edition and Trial orgs
+    name: Concurrent long-running requests (20+ seconds)
+    scope: org
+    metric: concurrent_requests
+    limit: 5
+    quote: '"5" concurrent requests'
+  - tier: Production orgs and Sandboxes
+    name: Concurrent long-running requests (20+ seconds)
+    scope: org
+    metric: concurrent_requests
+    limit: 25
+    quote: '"25" concurrent requests'
+limit_count: 6
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Read the header, not the docs
+    description: >-
+      Sforce-Limit-Info comes back on every REST response. An agent should parse it before every
+      write burst rather than modelling the org's allocation from the edition.
+  - name: No Retry-After
+    description: >-
+      Because Salesforce publishes no Retry-After, a client that hits REQUEST_LIMIT_EXCEEDED must
+      wait out the rolling 24-hour window rather than back off for a stated interval. Treat it as
+      a hard stop, not a throttle.
+  - name: Concurrency is separate from volume
+    description: >-
+      The 20-second concurrent-request ceiling is enforced independently of the daily allocation.
+      Long SOQL against a large Case table is what usually trips it.
+  - name: Move bulk work off the sync API
+    description: >-
+      Bulk API 2.0 jobs are metered differently from synchronous REST calls; large Case or Knowledge
+      migrations belong there.
 maintainers:
   - name: Salesforce
     email: developer@salesforce.com

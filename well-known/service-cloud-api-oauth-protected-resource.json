@@ -1,0 +1,9 @@
+{
+  "resource": "https://api.salesforce.com",
+  "authorization_servers": [
+    "https://login.salesforce.com"
+  ],
+  "scopes_supported": [
+    "api", "sfap_api", "refresh_token", "einstein_gpt_api"
+  ]
+}

@@ -1,0 +1,157 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  Live probes of api.salesforce.com and login.salesforce.com /.well-known/* (2026-08-27),
+  openapi/service-cloud-einstein-bots-openapi.yml, grpc/service-cloud-pubsub-api.proto,
+  Salesforce's hosted-MCP reference pages, and https://compliance.salesforce.com/
+standards:
+  - id: oauth2
+    name: OAuth 2.0 (RFC 6749)
+    conforms: true
+    evidence:
+      - >-
+        https://api.salesforce.com/.well-known/oauth-authorization-server → 200; issuer
+        https://login.salesforce.com, grant_types_supported [authorization_code, refresh_token].
+      - openapi/service-cloud-einstein-bots-openapi.yml declares an oauth2 securityScheme.
+  - id: oauth2-pkce
+    name: 'PKCE (RFC 7636)'
+    conforms: true
+    evidence: 'code_challenge_methods_supported: ["S256"] in the authorization-server metadata.'
+  - id: rfc8414
+    name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+    conforms: true
+    evidence: 'https://api.salesforce.com/.well-known/oauth-authorization-server returned 200 with a conformant document.'
+  - id: rfc9728
+    name: OAuth 2.0 Protected Resource Metadata (RFC 9728)
+    conforms: true
+    evidence: >-
+      https://api.salesforce.com/.well-known/oauth-protected-resource → 200, and the per-resource
+      form .../oauth-protected-resource/platform/mcp/v1/platform/sobject-all → 200 naming
+      resource, authorization_servers and scopes_supported [mcp_api, refresh_token].
+    caveat: >-
+      The per-resource path is a wildcard generator — a bogus resource name also returns 200 — so
+      the metadata is served but does not itself attest that a given resource exists.
+  - id: oidc
+    name: OpenID Connect Discovery 1.0
+    conforms: true
+    evidence: 'https://login.salesforce.com/.well-known/openid-configuration → 200 (saved to well-known/).'
+  - id: oauth-dcr
+    name: 'OAuth 2.0 Dynamic Client Registration (RFC 7591 / OIDC Registration)'
+    conforms: true
+    evidence: >-
+      https://login.salesforce.com/.well-known/openid-configuration advertises
+      registration_endpoint https://login.salesforce.com/services/oauth2/register.
+    caveat: >-
+      DIVERGENT METADATA. The api.salesforce.com authorization-server document does NOT carry a
+      registration_endpoint and advertises only 4 scopes, while the login.salesforce.com OIDC
+      discovery document carries the registration endpoint and 37 scopes. A client that discovers
+      Salesforce through the API host sees a materially smaller authorization surface than one that
+      discovers it through the login host. Salesforce's own MCP connection guide still directs
+      integrators to an admin-created External Client App consumer key rather than to DCR.
+  - id: rfc7662
+    name: 'OAuth 2.0 Token Introspection (RFC 7662)'
+    conforms: true
+    evidence: 'introspection_endpoint https://login.salesforce.com/services/oauth2/introspect in the OIDC discovery document.'
+  - id: rfc7009
+    name: 'OAuth 2.0 Token Revocation (RFC 7009)'
+    conforms: true
+    evidence: 'revocation_endpoint https://login.salesforce.com/services/oauth2/revoke in the OIDC discovery document.'
+  - id: private-key-jwt
+    name: 'private_key_jwt client authentication (RFC 7523)'
+    conforms: true
+    evidence: 'token_endpoint_auth_methods_supported includes private_key_jwt; the Einstein Bots spec documents a JWT Bearer flow with the chatbot_api scope.'
+  - id: mcp
+    name: Model Context Protocol
+    conforms: true
+    evidence: >-
+      Salesforce Hosted MCP Servers are GA (github.com/forcedotcom/mcp-hosted); the sobject-all
+      endpoint answered a JSON-RPC tools/list POST with 401 "JWT Token is required", i.e. a live
+      auth-gated MCP endpoint. A first-party stdio server ships as npm @salesforce/mcp 0.30.15.
+  - id: openapi
+    name: OpenAPI 3.0
+    conforms: true
+    evidence: 'openapi/service-cloud-einstein-bots-openapi.yml declares openapi: 3.0.0 with 5 operations and 51 schemas.'
+    caveat: >-
+      Covers ONLY the Einstein Bots Runtime API. The core Service Cloud sObject/Query REST surface
+      has no published static OpenAPI; an org generates its own at
+      /services/data/v67.0/async/specifications/oas3 behind authentication.
+  - id: grpc
+    name: gRPC / Protocol Buffers 3
+    conforms: true
+    evidence: 'grpc/service-cloud-pubsub-api.proto — syntax proto3, package eventbus.v1, service PubSub with 6 RPCs, 4 of them bidirectional streaming.'
+  - id: avro
+    name: Apache Avro
+    conforms: true
+    evidence: >-
+      The Pub/Sub API carries event payloads as Avro-encoded bytes; GetSchema returns the Avro
+      schema JSON for a topic (SchemaInfo.schema_json in the .proto).
+  - id: soap
+    name: SOAP 1.1 / WSDL 1.1
+    conforms: true
+    evidence: >-
+      Salesforce ships Enterprise, Partner, Metadata, Tooling and Apex SOAP APIs. The generated
+      Java clients are on Maven Central as com.force.api:force-partner-api / force-metadata-api /
+      force-apex-api / force-wsc at 64.0.3.
+    caveat: >-
+      The WSDL documents themselves are org-scoped. https://login.salesforce.com/soap/wsdl.jsp?type=*
+      302s to the login page (probed 2026-08-27), so no WSDL could be captured anonymously.
+  - id: bayeux
+    name: Bayeux / CometD
+    conforms: true
+    evidence: 'Streaming API is a CometD/Bayeux long-polling surface at /cometd/{version}.'
+  - id: soql
+    name: SOQL / SOSL
+    conforms: true
+    evidence: Salesforce's own query languages, exposed through /query, /search and the MCP soqlQuery and find tools.
+  - id: rfc9457
+    name: 'Problem Details for HTTP APIs (RFC 9457)'
+    conforms: false
+    evidence: >-
+      Neither error envelope uses application/problem+json. Einstein Bots returns a flat vendor
+      object; the platform REST API returns an array of {message, errorCode, fields}.
+  - id: rfc8594
+    name: 'Sunset HTTP Header (RFC 8594)'
+    conforms: false
+    evidence: >-
+      No Sunset or Deprecation header. Deprecated API version use is signalled with the generic
+      HTTP `Warning` response header, and a retired version returns 410.
+  - id: ratelimit-headers
+    name: 'IETF RateLimit header fields'
+    conforms: false
+    evidence: 'Salesforce emits Sforce-Limit-Info instead of RateLimit-* / X-RateLimit-* / Retry-After.'
+  - id: idempotency-key
+    name: 'Idempotency-Key HTTP header (IETF draft)'
+    conforms: partial
+    evidence: >-
+      UI API accepts a UUID v4 Idempotency-Key on POST/PATCH/DELETE of /ui-api/records with a
+      30-day cache. The core sObjects REST layer does not.
+  - id: json-api
+    name: 'JSON:API'
+    conforms: false
+    evidence: Salesforce uses its own record envelope with an `attributes` block, not JSON:API.
+  - id: scim
+    name: 'SCIM 2.0 (RFC 7643/7644)'
+    conforms: unknown
+    evidence: >-
+      Not probed in this pass. Salesforce markets SCIM-based user provisioning as an Identity
+      capability; no urn:ietf:params:scim schema URN was observed in any contract captured here,
+      so no claim is made.
+domain_standard:
+  market: CRM / customer service and contact centre
+  finding: none
+  note: >-
+    REWARD-ONLY CHECK, HONESTLY EMPTY. The customer-service market has no adopted interoperability
+    contract standard of the kind this check looks for — there is no CRM equivalent of FHIR, SCIM,
+    OData, OpenRTB, LTI or ISO 20022 for cases, knowledge articles or omni-channel routing.
+    Salesforce IS the de-facto schema for this market: Case, Knowledge__kav, LiveChatTranscript and
+    MessagingSession are what other vendors map TO. Nothing was invented to fill this slot.
+  probed_for:
+    - {standard: OData, result: 'not declared — no $metadata surface in any captured contract'}
+    - {standard: 'SCIM URN', result: 'not present in any captured contract'}
+    - {standard: 'CloudEvents', result: 'not used — the Pub/Sub API carries Avro over gRPC, not CloudEvents envelopes'}
+    - {standard: 'ActivityPub / OAI-PMH / LTI / HL7 / X12 / ISO 20022', result: 'not applicable to this market'}
+compliance:
+  published: true
+  site: https://compliance.salesforce.com/
+  detail: security/service-cloud-trust-center.yml
+  observed_certifications: [IRAP, 'PCI DSS', 'ACSC Essential 8', ENS]

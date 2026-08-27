@@ -1,0 +1,145 @@
+generated: '2026-08-27'
+method: derived
+source: >-
+  mcp/service-cloud-mcp.yml (tool names quoted from Salesforce's hosted-MCP reference pages)
+  bound against openapi/service-cloud-einstein-bots-openapi.yml and the documented Salesforce
+  REST API sObject resources.
+note: >-
+  The two surfaces in this repo barely overlap, and that IS the finding. The only OpenAPI
+  Salesforce publishes for a Service Cloud surface is the Einstein Bots Runtime API; the hosted
+  MCP tools sit on top of the sObject REST layer, whose OpenAPI is generated PER ORG and is not
+  published as a static document. Every crosswalk row below is therefore mapped by documented
+  semantics against the REST API Developer Guide's named resources, not against operationIds in
+  a spec held in this repo — confidence is set accordingly and no operationId is invented.
+surfaces:
+  openapi:
+    file: openapi/service-cloud-einstein-bots-openapi.yml
+    title: Einstein Bots API (BETA) v5.3.0
+    operations: 5
+    gated: false
+    note: Public spec, live runtime — /status and /versions answer anonymously.
+  rest_sobject:
+    docs: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
+    base: https://{MyDomainName}.my.salesforce.com/services/data/v67.0
+    gated: true
+    note: >-
+      No static published OpenAPI. An org can generate an OAS 3.0 document for its own sObjects
+      via /services/data/v67.0/async/specifications/oas3, which requires an authenticated session,
+      so operationIds are org-specific and cannot be captured here.
+  mcp:
+    url: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+    gated: true
+    note: tools/list returns 401 "JWT Token is required"; tool names taken from the published reference.
+  grpc:
+    file: grpc/service-cloud-pubsub-api.proto
+    service: eventbus.v1.PubSub
+    rpcs: 6
+    gated: true
+    note: api.pubsub.salesforce.com:7443 — event surface, no REST or MCP equivalent.
+crosswalk:
+  - tool: soqlQuery
+    category: read
+    rest: ['GET /services/data/v67.0/query']
+    binding: documented-resource
+    confidence: high
+    note: The Query REST resource. Same SOQL, same governor limits.
+  - tool: find
+    category: read
+    rest: ['GET /services/data/v67.0/search', 'GET /services/data/v67.0/parameterizedSearch']
+    binding: documented-resource
+    confidence: high
+    note: SOSL text search across multiple objects.
+  - tool: getObjectSchema
+    category: read
+    rest: ['GET /services/data/v67.0/sobjects/{SObject}/describe', 'GET /services/data/v67.0/sobjects']
+    binding: documented-resource
+    confidence: high
+  - tool: getUserInfo
+    category: read
+    rest: ['GET /services/oauth2/userinfo']
+    binding: documented-resource
+    confidence: high
+    note: Also exposed as userinfo_endpoint in well-known/service-cloud-login-openid-configuration.json.
+  - tool: listRecentSobjectRecords
+    category: read
+    rest: ['GET /services/data/v67.0/recent', 'GET /services/data/v67.0/sobjects/{SObject}/listviews']
+    binding: documented-resource
+    confidence: medium
+  - tool: getRelatedRecords
+    category: read
+    rest: ['GET /services/data/v67.0/sobjects/{SObject}/{id}/{relationshipName}']
+    binding: documented-resource
+    confidence: high
+  - tool: createSobjectRecord
+    category: write
+    rest: ['POST /services/data/v67.0/sobjects/{SObject}']
+    binding: documented-resource
+    confidence: high
+  - tool: updateSobjectRecord
+    category: write
+    rest: ['PATCH /services/data/v67.0/sobjects/{SObject}/{id}']
+    binding: documented-resource
+    confidence: high
+  - tool: updateRelatedRecord
+    category: write
+    rest: ['PATCH /services/data/v67.0/sobjects/{SObject}/{id}']
+    binding: documented-resource
+    confidence: medium
+    note: Resolves the child id through the parent relationship first, then PATCHes the child.
+  - tool: deleteSobjectRecord
+    category: destructive
+    rest: ['DELETE /services/data/v67.0/sobjects/{SObject}/{id}']
+    binding: documented-resource
+    confidence: high
+    note: Recycle Bin recovery for 15 days; see conventions/service-cloud-conventions.yml reversibility.
+  - tool: deleteRelatedRecord
+    category: destructive
+    rest: ['DELETE /services/data/v67.0/sobjects/{SObject}/{id}']
+    binding: documented-resource
+    confidence: medium
+mcp_only: []
+rest_only:
+  - operationId: checkHealthStatus
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    reason: Einstein Bots runtime health probe. No MCP tool covers the bot runtime at all.
+  - operationId: getAPIVersions
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    reason: Einstein Bots API version discovery. No MCP equivalent.
+  - operationId: startSession
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    reason: >-
+      Starts a bot conversation session. The entire Einstein Bots conversational surface is
+      absent from the hosted MCP servers — an agent can read and mutate Case records but cannot
+      drive a bot session through MCP.
+  - operationId: continueSession
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    reason: Sends a message into an existing bot session. No MCP equivalent.
+  - operationId: endSession
+    spec: openapi/service-cloud-einstein-bots-openapi.yml
+    reason: Ends a bot session. No MCP equivalent.
+grpc_only:
+  - rpc: eventbus.v1.PubSub/Subscribe
+    reason: Streaming event subscription. No REST or MCP equivalent.
+  - rpc: eventbus.v1.PubSub/ManagedSubscribe
+    reason: Server-managed replay-tracked subscription. gRPC only.
+  - rpc: eventbus.v1.PubSub/Publish
+    reason: Publish platform events. gRPC only.
+  - rpc: eventbus.v1.PubSub/PublishStream
+    reason: Streaming publish. gRPC only.
+  - rpc: eventbus.v1.PubSub/GetSchema
+    reason: Avro schema retrieval for an event topic. gRPC only.
+  - rpc: eventbus.v1.PubSub/GetTopic
+    reason: Topic metadata and publish/subscribe permissions. gRPC only.
+coverage:
+  mcp_tools_total: 11
+  mcp_tools_mapped: 11
+  mcp_only: 0
+  openapi_operations_total: 5
+  openapi_operations_mapped: 0
+  rest_only: 5
+  grpc_rpcs_total: 6
+  grpc_only: 6
+  overlap: >-
+    Zero. The published OpenAPI and the MCP surface describe different products inside Service
+    Cloud. An agent that only speaks MCP cannot touch Einstein Bots or platform events; an agent
+    that only reads the published OpenAPI sees five bot-runtime operations and nothing else.

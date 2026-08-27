@@ -1,0 +1,69 @@
+generated: '2026-08-27'
+method: searched
+source: >-
+  https://github.com/forcedotcom/pub-sub-api (pubsub_api.proto saved verbatim to
+  grpc/service-cloud-pubsub-api.proto), https://api.pubsub.salesforce.com (probed 415, 2026-08-27),
+  and the Salesforce Streaming API / Platform Events documentation.
+asyncapi_published: false
+asyncapi_note: >-
+  Salesforce publishes NO AsyncAPI document for any of its event surfaces. The machine-readable
+  contract for the modern surface is a gRPC .proto plus per-topic Avro schemas fetched at runtime,
+  which is a real contract but not an AsyncAPI one. Nothing was authored on Salesforce's behalf.
+event_surfaces:
+  - name: Pub/Sub API
+    style: gRPC bidirectional streaming
+    contract: grpc/service-cloud-pubsub-api.proto
+    contract_type: protobuf3
+    service: eventbus.v1.PubSub
+    endpoint: api.pubsub.salesforce.com:7443
+    probed: {url: 'https://api.pubsub.salesforce.com', status: 415, note: 'gRPC host live; rejects a plain HTTP GET'}
+    status: GA
+    payload_encoding: Avro
+    schema_discovery: 'GetSchema(SchemaRequest) returns SchemaInfo — the Avro schema JSON for a topic.'
+    rpcs:
+      - {name: Subscribe, signature: 'stream FetchRequest -> stream FetchResponse', purpose: 'Client-managed replay-tracked event subscription.'}
+      - {name: ManagedSubscribe, signature: 'stream ManagedFetchRequest -> stream ManagedFetchResponse', purpose: 'Server-managed subscription; Salesforce tracks the replay position.'}
+      - {name: Publish, signature: 'PublishRequest -> PublishResponse', purpose: 'Publish one batch of events.'}
+      - {name: PublishStream, signature: 'stream PublishRequest -> stream PublishResponse', purpose: 'Streaming publish.'}
+      - {name: GetSchema, signature: 'SchemaRequest -> SchemaInfo', purpose: 'Retrieve the Avro schema for a topic.'}
+      - {name: GetTopic, signature: 'TopicRequest -> TopicInfo', purpose: 'Topic metadata plus can_publish / can_subscribe permissions.'}
+    auth: 'OAuth access token + instance URL + tenant id passed as gRPC metadata.'
+  - name: Platform Events
+    style: publish/subscribe over Pub/Sub API or Streaming API
+    contract: 'per-event custom object schema (__e), described per org'
+    status: GA
+    note: >-
+      Custom event types defined in the org. The event schema is org-specific, which is why there
+      is no static catalogue to capture — GetTopic + GetSchema is the discovery path.
+  - name: Change Data Capture
+    style: publish/subscribe
+    channels: '/data/{SObject}ChangeEvent, e.g. /data/CaseChangeEvent, /data/KnowledgeArticleVersionChangeEvent'
+    status: GA
+    note: >-
+      The Service-Cloud-relevant event stream: record-level create/update/delete/undelete events for
+      Case and the rest, delivered as platform events over the same Pub/Sub transport.
+  - name: Streaming API (PushTopic / generic streaming)
+    style: CometD / Bayeux long-poll
+    endpoint: 'https://{MyDomainName}.my.salesforce.com/cometd/{version}'
+    status: GA (legacy)
+    note: The older transport. Pub/Sub API is the recommended surface for new integrations.
+  - name: Outbound Messages
+    style: server-initiated HTTP callout (webhook-equivalent)
+    protocol: SOAP over HTTPS
+    status: GA
+    note: >-
+      Workflow-triggered SOAP messages POSTed to a customer-supplied endpoint, with automatic retry
+      for 24 hours until the endpoint ACKs. This is Salesforce's nearest thing to a classic webhook
+      and it is SOAP, not JSON. The notification WSDL is generated per outbound-message definition
+      inside the org and is not publishable here.
+  - name: Apex callouts / Flow HTTP callout
+    style: org-authored outbound HTTP
+    note: An org can be configured to POST arbitrary JSON on record events. Consumer-defined, not a published surface.
+webhooks:
+  advertised: true
+  form: >-
+    Outbound Messages (SOAP callout with 24-hour retry) and Change Data Capture over Pub/Sub. There
+    is no JSON webhook subscription API, no signing-secret scheme and no published event-type catalogue.
+  gap: >-
+    An agent integrating with Service Cloud cannot subscribe to case events over plain HTTPS JSON.
+    It must speak gRPC + Avro, CometD, or stand up a SOAP listener.
