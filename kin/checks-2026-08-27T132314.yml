@@ -3,14 +3,14 @@ kin_checks:
   slug: service-cloud
   schema_version: 0.15.1
   scored_at: '2026-08-27'
-  run_ts: 2026-08-27T103455
+  run_ts: 2026-08-27T132314
   note: Actionable checks only (missed + partial). earned/na are every other check
     in rubric/scoring-0.15.1.yml; counts below let you verify that.
   counts:
     total: 130
-    earned: 24
-    partial: 9
-    missed: 55
+    earned: 29
+    partial: 10
+    missed: 49
     na: 42
   checks:
   - id: description_substantive
@@ -18,8 +18,6 @@ kin_checks:
   - id: human_url_per_api
     status: missed
   - id: base_url_per_api
-    status: missed
-  - id: well_known_published
     status: missed
   - id: llms_txt_published
     status: missed
@@ -48,10 +46,6 @@ kin_checks:
   - id: balanced_severities
     status: missed
   - id: vocabulary_published
-    status: missed
-  - id: conformance_declared
-    status: missed
-  - id: overlay_published
     status: missed
   - id: change_log_present
     status: missed
@@ -98,8 +92,6 @@ kin_checks:
     status: missed
   - id: reversibility_documented
     status: missed
-  - id: mcp_server
-    status: missed
   - id: idempotency
     status: missed
   - id: error_semantics
@@ -115,10 +107,6 @@ kin_checks:
   - id: agent_card
     status: missed
   - id: dry_run_mode
-    status: missed
-  - id: delegated_identity
-    status: missed
-  - id: protected_resource_metadata
     status: missed
   - id: dynamic_client_registration
     status: missed
@@ -143,10 +131,14 @@ kin_checks:
   - id: plans_multiple
     status: partial
     earned: 1.0
+  - id: mcp_server
+    status: partial
+    earned: 4.8
+    detail: 'grade: documented'
   - id: auth_clarity
     status: partial
-    earned: 3.5
-    detail: 'grade: bearer'
+    earned: 9.0
+    detail: 'grade: served'
   - id: openapi_examples
     status: partial
     earned: 1.75

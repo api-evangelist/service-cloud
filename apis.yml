@@ -29,212 +29,232 @@ modified: '2026-08-27'
 specificationVersion: '0.23'
 url: https://raw.githubusercontent.com/api-evangelist/service-cloud/main/apis.yml
 apis:
-  - name: Service Cloud REST API
-    description: >-
-      Core REST API for Service Cloud operations: sObject CRUD over Case, CaseComment, EmailMessage,
-      Knowledge articles and every other standard and custom object, plus SOQL query, SOSL search
-      and composite/batch requests. Versioned in the URL path; the base host is the org's own
-      My Domain returned as instance_url with the OAuth token.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-    baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0
-    tags:
-      - Cases
-      - CRM
-      - Customers
-      - REST
-      - Support
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm
-      - type: Authentication
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
-      - type: APIReference
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-      - type: Conventions
-        url: conventions/service-cloud-conventions.yml
-      - type: DataModel
-        url: data-model/service-cloud-data-model.yml
-  - name: Service Cloud Case Management API
-    description: >-
-      The Case object and its children — CaseComment, CaseHistory, EmailMessage — worked through the
-      sObjects REST resources. Assignment-rule behaviour on create and update is controlled by the
-      Sforce-Auto-Assign request header.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
-    baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/sobjects/Case
-    tags:
-      - Cases
-      - Escalation
-      - Routing
-      - Tickets
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
-      - type: APIReference
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_basic_info.htm
-  - name: Service Cloud Knowledge API
-    description: >-
-      Knowledge article management — article versions, categories, publishing states and the
-      knowledgeManagement REST resources used to surface self-service content.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/
-    baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/support/knowledgeManagement
-    tags:
-      - Articles
-      - Documentation
-      - Knowledge
-      - Self-Service
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
-      - type: APIReference
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm
-  - name: Service Cloud Omni-Channel API
-    description: >-
-      Omni-channel presence, work assignment and routing, exposed through the connect/omnichannel
-      REST resources and the ServiceChannel / PendingServiceRouting objects.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
-    baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/connect/omnichannel
-    tags:
-      - Omnichannel
-      - Presence
-      - Routing
-      - Workforce
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
-      - type: Guide
-        url: https://help.salesforce.com/s/articleView?id=sf.omnichannel_intro.htm&type=5
-  - name: Service Cloud Live Agent API
-    description: >-
-      Real-time chat with customers over the Live Agent REST surface. Superseded for new builds by
-      Messaging for In-App and Web, which authenticates with the scrt_api OAuth scope.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-    baseUrl: https://{MyDomainName}.my.salesforce.com/chat/rest
-    tags:
-      - Chat
-      - Live-Agent
-      - Messaging
-      - Real-Time
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm
-      - type: APIReference
-        url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm
-  - name: Service Cloud Einstein Bots API
-    description: >-
-      The Einstein Bots Runtime API — start a bot session, exchange messages, receive intents and
-      entities, handle escalation to a human agent, and end the session. The only Service Cloud
-      surface for which Salesforce publishes a static OpenAPI document. Six regional hosts; the
-      live runtime answers /status and /versions anonymously.
-    humanUrl: https://github.com/forcedotcom/einstein-bot-sdk-java
-    baseUrl: https://runtime-api-na-west.prod.chatbots.sfdc.sh
-    tags:
-      - Artificial Intelligence
-      - Automation
-      - Bots
-      - Chatbots
-      - Einstein
-    tags_raw:
-      - AI
-      - Automation
-      - Bots
-      - Chatbots
-      - Einstein
-    properties:
-      - type: OpenAPI
-        url: openapi/service-cloud-einstein-bots-openapi.yml
-      - type: Overlay
-        url: overlays/service-cloud-einstein-bots-overlay.yaml
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
-      - type: SourceCode
-        url: https://github.com/forcedotcom/einstein-bot-sdk-java
-      - type: AgentSkill
-        url: skills/service-cloud-einstein-bot-session.md
-  - name: Service Cloud Pub/Sub API
-    description: >-
-      The gRPC event API. Publish and subscribe to platform events and Change Data Capture events
-      (including /data/CaseChangeEvent) with Avro-encoded payloads and replay-tracked subscriptions.
-      Six RPCs on the eventbus.v1.PubSub service.
-    humanUrl: https://github.com/forcedotcom/pub-sub-api
-    baseUrl: https://api.pubsub.salesforce.com:7443
-    tags:
-      - Event
-      - gRPC
-      - Push Notifications
-      - Real-Time
-      - Streaming
-    properties:
-      - type: Protobuf
-        url: grpc/service-cloud-pubsub-api.proto
-      - type: SourceCode
-        url: https://github.com/forcedotcom/pub-sub-api
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/platform/pub-sub-api/overview
-  - name: Service Cloud Streaming API
-    description: >-
-      CometD/Bayeux long-polling surface for PushTopic, generic streaming and platform event
-      subscriptions. The legacy transport; new integrations should use the Pub/Sub API.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/
-    baseUrl: https://{MyDomainName}.my.salesforce.com/cometd/67.0
-    tags:
-      - Event
-      - Push Notifications
-      - Real-Time
-      - Streaming
-    tags_raw:
-      - Events
-      - Push-Notifications
-      - Real-Time
-      - Streaming
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm
-      - type: Guide
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/quick_start.htm
-  - name: Service Cloud CTI API
-    description: >-
-      Open CTI — the JavaScript API that connects a telephony system's softphone to the Service
-      Cloud console, plus the Voice/contact-centre surfaces built on it.
-    humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
-    baseUrl: https://{MyDomainName}.my.salesforce.com/support/api/67.0/interaction.js
-    tags:
-      - Call Center
-      - CTI
-      - Phone
-      - Telephony
-    tags_raw:
-      - Call-Center
-      - CTI
-      - Phone
-      - Telephony
-    properties:
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_intro.htm
-  - name: Salesforce Hosted MCP Servers
-    description: >-
-      Generally available remote Model Context Protocol servers that expose the Salesforce sObject
-      layer to AI agents over OAuth. Four least-privilege SObject servers (all, reads, mutations,
-      deletes) plus Data 360, Headless 360 and Tableau Next. Eleven tools on SObject All, including
-      SOQL query, cross-object search, describe, create, update and delete.
-    humanUrl: https://developer.salesforce.com/docs/platform/hosted-mcp-servers
-    baseUrl: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
-    tags:
-      - Agents
-      - Artificial Intelligence
-      - MCP
-      - Model Context Protocol
-      - Tools
-    properties:
-      - type: MCPServer
-        url: mcp/service-cloud-mcp.yml
-      - type: ToolCrosswalk
-        url: mcp/service-cloud-tool-crosswalk.yml
-      - type: AgentSkill
-        url: skills/service-cloud-case-triage-via-mcp.md
-      - type: Documentation
-        url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers
-      - type: SourceCode
-        url: https://github.com/forcedotcom/mcp-hosted
+- name: Service Cloud REST API
+  description: >-
+    Core REST API for Service Cloud operations: sObject CRUD over Case, CaseComment, EmailMessage, Knowledge
+    articles and every other standard and custom object, plus SOQL query, SOSL search and composite/batch
+    requests. Versioned in the URL path; the base host is the org's own My Domain returned as instance_url
+    with the OAuth token.
+  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
+  baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0
+  tags:
+  - Cases
+  - CRM
+  - Customers
+  - REST
+  - Support
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm
+  - type: Authentication
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
+  - type: APIReference
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
+  - type: Conventions
+    url: conventions/service-cloud-conventions.yml
+  - type: DataModel
+    url: data-model/service-cloud-data-model.yml
+- name: Service Cloud Case Management API
+  description: >-
+    The Case object and its children — CaseComment, CaseHistory, EmailMessage — worked through the sObjects
+    REST resources. Assignment-rule behaviour on create and update is controlled by the Sforce-Auto-Assign
+    request header.
+  humanUrl: >-
+    https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
+  baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/sobjects/Case
+  tags:
+  - Cases
+  - Escalation
+  - Routing
+  - Tickets
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
+  - type: APIReference
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_basic_info.htm
+- name: Service Cloud Knowledge API
+  description: >-
+    Knowledge article management — article versions, categories, publishing states and the knowledgeManagement
+    REST resources used to surface self-service content.
+  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/
+  baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/support/knowledgeManagement
+  tags:
+  - Articles
+  - Documentation
+  - Knowledge
+  - Self-Service
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
+  - type: APIReference
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm
+- name: Service Cloud Omni-Channel API
+  description: >-
+    Omni-channel presence, work assignment and routing, exposed through the connect/omnichannel REST resources
+    and the ServiceChannel / PendingServiceRouting objects.
+  humanUrl: >-
+    https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
+  baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/connect/omnichannel
+  tags:
+  - Omnichannel
+  - Presence
+  - Routing
+  - Workforce
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
+  - type: Guide
+    url: https://help.salesforce.com/s/articleView?id=sf.omnichannel_intro.htm&type=5
+- name: Service Cloud Live Agent API
+  description: >-
+    Real-time chat with customers over the Live Agent REST surface. Superseded for new builds by Messaging
+    for In-App and Web, which authenticates with the scrt_api OAuth scope.
+  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
+  baseUrl: https://{MyDomainName}.my.salesforce.com/chat/rest
+  tags:
+  - Chat
+  - Live-Agent
+  - Messaging
+  - Real-Time
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm
+  - type: APIReference
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm
+- name: Service Cloud Pub/Sub API
+  description: >-
+    The gRPC event API. Publish and subscribe to platform events and Change Data Capture events (including
+    /data/CaseChangeEvent) with Avro-encoded payloads and replay-tracked subscriptions. Six RPCs on the
+    eventbus.v1.PubSub service.
+  humanUrl: https://github.com/forcedotcom/pub-sub-api
+  baseUrl: https://api.pubsub.salesforce.com:7443
+  tags:
+  - Event
+  - gRPC
+  - Push Notifications
+  - Real-Time
+  - Streaming
+  properties:
+  - type: Protobuf
+    url: grpc/service-cloud-pubsub-api.proto
+  - type: SourceCode
+    url: https://github.com/forcedotcom/pub-sub-api
+  - type: Documentation
+    url: https://developer.salesforce.com/docs/platform/pub-sub-api/overview
+- name: Service Cloud Streaming API
+  description: >-
+    CometD/Bayeux long-polling surface for PushTopic, generic streaming and platform event subscriptions.
+    The legacy transport; new integrations should use the Pub/Sub API.
+  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/
+  baseUrl: https://{MyDomainName}.my.salesforce.com/cometd/67.0
+  tags:
+  - Event
+  - Push Notifications
+  - Real-Time
+  - Streaming
+  tags_raw:
+  - Events
+  - Push-Notifications
+  - Real-Time
+  - Streaming
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm
+  - type: Guide
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/quick_start.htm
+- name: Service Cloud CTI API
+  description: >-
+    Open CTI — the JavaScript API that connects a telephony system's softphone to the Service Cloud console,
+    plus the Voice/contact-centre surfaces built on it.
+  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
+  baseUrl: https://{MyDomainName}.my.salesforce.com/support/api/67.0/interaction.js
+  tags:
+  - Call Center
+  - CTI
+  - Phone
+  - Telephony
+  tags_raw:
+  - Call-Center
+  - CTI
+  - Phone
+  - Telephony
+  properties:
+  - type: Documentation
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_intro.htm
+- name: Salesforce Hosted MCP Servers
+  description: >-
+    Generally available remote Model Context Protocol servers that expose the Salesforce sObject layer
+    to AI agents over OAuth. Four least-privilege SObject servers (all, reads, mutations, deletes) plus
+    Data 360, Headless 360 and Tableau Next. Eleven tools on SObject All, including SOQL query, cross-object
+    search, describe, create, update and delete.
+  humanUrl: https://developer.salesforce.com/docs/platform/hosted-mcp-servers
+  baseUrl: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
+  tags:
+  - Agents
+  - Artificial Intelligence
+  - MCP
+  - Model Context Protocol
+  - Tools
+  properties:
+  - type: MCPServer
+    url: mcp/service-cloud-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/service-cloud-tool-crosswalk.yml
+  - type: AgentSkill
+    url: skills/service-cloud-case-triage-via-mcp.md
+  - type: Documentation
+    url: https://developer.salesforce.com/docs/platform/hosted-mcp-servers
+  - type: SourceCode
+    url: https://github.com/forcedotcom/mcp-hosted
+- aid: service-cloud:service-cloud-bot-api
+  name: Salesforce Service Cloud APIs Bot API
+  description: The bot API from Salesforce Service Cloud APIs — 3 operation(s) for bot.
+  tags:
+  - bot
+  properties:
+  - type: OpenAPI
+    url: openapi/service-cloud-bot-api-openapi.yml
+  - type: Documentation
+    url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
+  - type: SourceCode
+    url: https://github.com/forcedotcom/einstein-bot-sdk-java
+- aid: service-cloud:service-cloud-health-api
+  name: Salesforce Service Cloud APIs Health API
+  description: The health API from Salesforce Service Cloud APIs — 1 operation(s) for health.
+  tags:
+  - health
+  properties:
+  - type: OpenAPI
+    url: openapi/service-cloud-health-api-openapi.yml
+  - type: Documentation
+    url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
+  - type: SourceCode
+    url: https://github.com/forcedotcom/einstein-bot-sdk-java
+- aid: service-cloud:service-cloud-versions-api
+  name: Salesforce Service Cloud APIs Versions API
+  description: The versions API from Salesforce Service Cloud APIs — 1 operation(s) for versions.
+  tags:
+  - versions
+  properties:
+  - type: OpenAPI
+    url: openapi/service-cloud-versions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
+  - type: SourceCode
+    url: https://github.com/forcedotcom/einstein-bot-sdk-java
 maintainers:
   - name: Salesforce
     email: developer@salesforce.com
@@ -259,6 +279,8 @@ tags_raw:
   - Support
 include: []
 common:
+  - type: AgentSkill
+    url: skills/service-cloud-einstein-bot-session.md
   - type: Website
     url: https://www.salesforce.com/service/
   - type: Portal
