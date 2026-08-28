@@ -10,6 +10,18 @@ description: >-
   to AI agents over OAuth. There is no single global API host — every call is made against the
   customer's own org at the instance_url returned with the OAuth token, on API version 67.0
   (Summer '26). Authentication is OAuth 2.0 only; Salesforce issues no API keys.
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-service
@@ -279,6 +291,9 @@ tags_raw:
   - Support
 include: []
 common:
+  - type: CapabilityMap
+    url: capabilities/service-cloud-capability-edges.yml
+    name: Salesforce Service Cloud APIs Business Capability Map
   - type: AgentSkill
     url: skills/service-cloud-einstein-bot-session.md
   - type: Website
