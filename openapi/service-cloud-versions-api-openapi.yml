@@ -1,0 +1,123 @@
+openapi: 3.2.0
+info:
+  title: Einstein Bots API (BETA) Versions API
+  version: v5.3.0
+servers:
+- url: https://runtime-api-na-west.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - NA West
+- url: https://runtime-api-na-east.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - NA East
+- url: https://runtime-api-eu-west.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - EU West
+- url: https://runtime-api-eu-east.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - EU East
+- url: https://runtime-api-ap-west.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - AP West
+- url: https://runtime-api-ap-east.prod.chatbots.sfdc.sh
+  description: Einstein Bots API - AP East
+tags:
+- name: versions
+paths:
+  /versions:
+    get:
+      tags:
+      - versions
+      summary: Get API versions
+      description: Retrieve the list of supported Einstein Bots API versions.
+      operationId: getAPIVersions
+      responses:
+        200:
+          $ref: '#/components/responses/VersionsResponse'
+        default:
+          $ref: '#/components/responses/ErrorResponse'
+components:
+  responses:
+    VersionsResponse:
+      description: Supported API versions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SupportedVersions'
+    ErrorResponse:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      headers:
+        X-Request-ID:
+          description: Request ID. A UUID in string format to help with request tracking.
+          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          description: HTTP status.
+          type: integer
+          format: int32
+        path:
+          description: Request path.
+          type: string
+        requestId:
+          description: Request ID. A UUID in string format to help with request tracking.
+          type: string
+        error:
+          description: Error class name.
+          type: string
+        message:
+          description: Exception message.
+          type: string
+        timestamp:
+          description: Unix timestamp.
+          type: integer
+          format: int64
+      required:
+      - status
+      - path
+      - requestId
+      - error
+      - message
+      - timestamp
+      additionalProperties: false
+    SupportedVersions:
+      type: object
+      properties:
+        versions:
+          type: array
+          description: List of supported API versions.
+          items:
+            type: object
+            properties:
+              versionNumber:
+                type: string
+                description: API Version number.
+              status:
+                type: string
+                description: API Version status.
+                enum:
+                - ACTIVE
+                - DEPRECATED
+      required:
+      - versions
+      additionalProperties: false
+  securitySchemes:
+    chatbotAuth:
+      type: oauth2
+      description: chatbotAuth supports authorization code and implicit Oauth flows.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+          tokenUrl: https://login.salesforce.com/services/oauth2/token
+          scopes:
+            chatbot_api: Access bot APIs
+        implicit:
+          authorizationUrl: https://login.salesforce.com/services/oauth2/authorize
+          scopes:
+            chatbot_api: Access bot APIs
+    jwtBearer:
+      type: http
+      scheme: bearer
+      description: Salesforce OAuth access token obtained using the JWT Bearer flow. Use the `chatbot_api` scope with this flow to enable access to the Einstein Bots services.
