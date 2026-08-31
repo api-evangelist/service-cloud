@@ -171,7 +171,7 @@ apis:
   baseUrl: https://{MyDomainName}.my.salesforce.com/cometd/67.0
   tags:
   - Event
-  - Push Notifications
+  - Push-Notifications
   - Real-Time
   - Streaming
   tags_raw:
@@ -193,7 +193,7 @@ apis:
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
   baseUrl: https://{MyDomainName}.my.salesforce.com/support/api/67.0/interaction.js
   tags:
-  - Call Center
+  - Call-Center
   - CTI
   - Phone
   - Telephony
@@ -218,6 +218,11 @@ apis:
   - Agents
   - Artificial Intelligence
   - MCP
+  - Tools
+  tags_raw:
+  - Agents
+  - Artificial Intelligence
+  - MCP
   - Model Context Protocol
   - Tools
   properties:
@@ -235,6 +240,8 @@ apis:
   name: Salesforce Service Cloud APIs Bot API
   description: The bot API from Salesforce Service Cloud APIs — 3 operation(s) for bot.
   tags:
+  - Bot
+  tags_raw:
   - bot
   properties:
   - type: OpenAPI
@@ -247,6 +254,8 @@ apis:
   name: Salesforce Service Cloud APIs Health API
   description: The health API from Salesforce Service Cloud APIs — 1 operation(s) for health.
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -259,6 +268,8 @@ apis:
   name: Salesforce Service Cloud APIs Versions API
   description: The versions API from Salesforce Service Cloud APIs — 1 operation(s) for versions.
   tags:
+  - Versions
+  tags_raw:
   - versions
   properties:
   - type: OpenAPI
@@ -272,14 +283,10 @@ maintainers:
     email: developer@salesforce.com
     url: https://developer.salesforce.com
 tags:
-  - Agents
   - Cloud
-  - Contact Center
   - CRM
-  - Customer Service
+  - Customer-Service
   - Enterprise
-  - Help Desk
-  - Knowledge Management
   - Salesforce
   - Support
 tags_raw:
