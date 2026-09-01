@@ -171,7 +171,7 @@ apis:
   baseUrl: https://{MyDomainName}.my.salesforce.com/cometd/67.0
   tags:
   - Event
-  - Push-Notifications
+  - Push Notifications
   - Real-Time
   - Streaming
   tags_raw:
@@ -193,7 +193,7 @@ apis:
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
   baseUrl: https://{MyDomainName}.my.salesforce.com/support/api/67.0/interaction.js
   tags:
-  - Call-Center
+  - Call Center
   - CTI
   - Phone
   - Telephony
@@ -285,7 +285,7 @@ maintainers:
 tags:
   - Cloud
   - CRM
-  - Customer-Service
+  - Customer Service
   - Enterprise
   - Salesforce
   - Support
@@ -298,6 +298,9 @@ tags_raw:
   - Support
 include: []
 common:
+  - type: License
+    name: CC0-1.0
+    url: https://github.com/forcedotcom/pub-sub-api/blob/main/LICENSE
   - type: CapabilityMap
     url: capabilities/service-cloud-capability-edges.yml
     name: Salesforce Service Cloud APIs Business Capability Map
