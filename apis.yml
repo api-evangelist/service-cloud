@@ -40,10 +40,11 @@ specificationVersion: '0.23'
 url: https://raw.githubusercontent.com/api-evangelist/service-cloud/main/apis.yml
 apis:
 - name: Service Cloud REST API
-  description: 'Core REST API for Service Cloud operations: sObject CRUD over Case, CaseComment, EmailMessage,
-    Knowledge articles and every other standard and custom object, plus SOQL query, SOSL search and composite/batch
-    requests. Versioned in the URL path; the base host is the org''s own My Domain returned as instance_url
-    with the OAuth token.'
+  description: >-
+    Core REST API for Service Cloud operations: sObject CRUD over Case, CaseComment, EmailMessage, Knowledge
+    articles and every other standard and custom object, plus SOQL query, SOSL search and composite/batch
+    requests. Versioned in the URL path; the base host is the org's own My Domain returned as instance_url
+    with the OAuth token.
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
   baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0
   tags:
@@ -54,20 +55,25 @@ apis:
   - Support
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm
   - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm
   - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
   - type: Conventions
     url: conventions/service-cloud-conventions.yml
   - type: DataModel
     url: data-model/service-cloud-data-model.yml
 - name: Service Cloud Case Management API
-  description: The Case object and its children — CaseComment, CaseHistory, EmailMessage — worked through
-    the sObjects REST resources. Assignment-rule behaviour on create and update is controlled by the Sforce-Auto-Assign
+  description: >-
+    The Case object and its children — CaseComment, CaseHistory, EmailMessage — worked through the sObjects
+    REST resources. Assignment-rule behaviour on create and update is controlled by the Sforce-Auto-Assign
     request header.
-  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
+  humanUrl: >-
+    https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
   baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/sobjects/Case
   tags:
   - Cases
@@ -76,12 +82,15 @@ apis:
   - Tickets
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm
   - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_basic_info.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_sobject_basic_info.htm
 - name: Service Cloud Knowledge API
-  description: Knowledge article management — article versions, categories, publishing states and the
-    knowledgeManagement REST resources used to surface self-service content.
+  description: >-
+    Knowledge article management — article versions, categories, publishing states and the knowledgeManagement
+    REST resources used to surface self-service content.
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/
   baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/support/knowledgeManagement
   tags:
@@ -91,13 +100,17 @@ apis:
   - Self-Service
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
   - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm
 - name: Service Cloud Omni-Channel API
-  description: Omni-channel presence, work assignment and routing, exposed through the connect/omnichannel
-    REST resources and the ServiceChannel / PendingServiceRouting objects.
-  humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
+  description: >-
+    Omni-channel presence, work assignment and routing, exposed through the connect/omnichannel REST resources
+    and the ServiceChannel / PendingServiceRouting objects.
+  humanUrl: >-
+    https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
   baseUrl: https://{MyDomainName}.my.salesforce.com/services/data/v67.0/connect/omnichannel
   tags:
   - Omnichannel
@@ -106,12 +119,14 @@ apis:
   - Workforce
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/connect_resources_omnichannel.htm
   - type: Guide
     url: https://help.salesforce.com/s/articleView?id=sf.omnichannel_intro.htm&type=5
 - name: Service Cloud Live Agent API
-  description: Real-time chat with customers over the Live Agent REST surface. Superseded for new builds
-    by Messaging for In-App and Web, which authenticates with the scrt_api OAuth scope.
+  description: >-
+    Real-time chat with customers over the Live Agent REST surface. Superseded for new builds by Messaging
+    for In-App and Web, which authenticates with the scrt_api OAuth scope.
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
   baseUrl: https://{MyDomainName}.my.salesforce.com/chat/rest
   tags:
@@ -121,13 +136,16 @@ apis:
   - Real-Time
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm
   - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm
 - name: Service Cloud Pub/Sub API
-  description: The gRPC event API. Publish and subscribe to platform events and Change Data Capture events
-    (including /data/CaseChangeEvent) with Avro-encoded payloads and replay-tracked subscriptions. Six
-    RPCs on the eventbus.v1.PubSub service.
+  description: >-
+    The gRPC event API. Publish and subscribe to platform events and Change Data Capture events (including
+    /data/CaseChangeEvent) with Avro-encoded payloads and replay-tracked subscriptions. Six RPCs on the
+    eventbus.v1.PubSub service.
   humanUrl: https://github.com/forcedotcom/pub-sub-api
   baseUrl: https://api.pubsub.salesforce.com:7443
   tags:
@@ -144,8 +162,9 @@ apis:
   - type: Documentation
     url: https://developer.salesforce.com/docs/platform/pub-sub-api/overview
 - name: Service Cloud Streaming API
-  description: CometD/Bayeux long-polling surface for PushTopic, generic streaming and platform event
-    subscriptions. The legacy transport; new integrations should use the Pub/Sub API.
+  description: >-
+    CometD/Bayeux long-polling surface for PushTopic, generic streaming and platform event subscriptions.
+    The legacy transport; new integrations should use the Pub/Sub API.
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/
   baseUrl: https://{MyDomainName}.my.salesforce.com/cometd/67.0
   tags:
@@ -160,12 +179,15 @@ apis:
   - Streaming
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm
   - type: Guide
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/quick_start.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/quick_start.htm
 - name: Service Cloud CTI API
-  description: Open CTI — the JavaScript API that connects a telephony system's softphone to the Service
-    Cloud console, plus the Voice/contact-centre surfaces built on it.
+  description: >-
+    Open CTI — the JavaScript API that connects a telephony system's softphone to the Service Cloud console,
+    plus the Voice/contact-centre surfaces built on it.
   humanUrl: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/
   baseUrl: https://{MyDomainName}.my.salesforce.com/support/api/67.0/interaction.js
   tags:
@@ -180,11 +202,13 @@ apis:
   - Telephony
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_intro.htm
 - name: Salesforce Hosted MCP Servers
-  description: Generally available remote Model Context Protocol servers that expose the Salesforce sObject
-    layer to AI agents over OAuth. Four least-privilege SObject servers (all, reads, mutations, deletes)
-    plus Data 360, Headless 360 and Tableau Next. Eleven tools on SObject All, including SOQL query, cross-object
+  description: >-
+    Generally available remote Model Context Protocol servers that expose the Salesforce sObject layer
+    to AI agents over OAuth. Four least-privilege SObject servers (all, reads, mutations, deletes) plus
+    Data 360, Headless 360 and Tableau Next. Eleven tools on SObject All, including SOQL query, cross-object
     search, describe, create, update and delete.
   humanUrl: https://developer.salesforce.com/docs/platform/hosted-mcp-servers
   baseUrl: https://api.salesforce.com/platform/mcp/v1/platform/sobject-all
@@ -254,7 +278,8 @@ apis:
     url: https://github.com/forcedotcom/einstein-bot-sdk-java
 - name: Salesforce Service Cloud SOAP API
   description: SOAP-based API for enterprise integration and complex service cloud operations.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
   humanURL: https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/
   baseURL: https://yourInstance.salesforce.com/services/Soap/c/59.0/
   tags:
@@ -265,10 +290,12 @@ apis:
   - type: Documentation
     url: https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/
   - type: WSDL
-    url: https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_quickstart_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_quickstart_intro.htm
 - name: Knowledge API
   description: API for managing knowledge base articles and content.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
   humanURL: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/knowledge/
   tags:
@@ -279,10 +306,12 @@ apis:
   - type: Documentation
     url: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/
   - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm
 - name: Einstein Bot API
   description: API for building and managing AI-powered chatbots for customer service.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
   humanURL: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/einstein/bots/
   tags:
@@ -299,12 +328,16 @@ apis:
   - type: Documentation
     url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/
   - type: Developer Guide
-    url: https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/bot_cookbook_before.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/bot_cookbook_before.htm
 - name: Omni-Channel API
-  description: API for managing omni-channel routing, agent presence, and work distribution across multiple
-    service channels including chat, messaging, email, and voice.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/omnichannel_developer_guide_intro.htm
+  description: >-
+    API for managing omni-channel routing, agent presence, and work distribution across multiple service
+    channels including chat, messaging, email, and voice.
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  humanURL: >-
+    https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/omnichannel_developer_guide_intro.htm
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
   tags:
   - Agent Presence
@@ -318,14 +351,19 @@ apis:
   - Work Distribution
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/omnichannel_developer_guide_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/omnichannel_developer_guide_intro.htm
   - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/service_presence_soap_api_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.omni_channel_dev.meta/omni_channel_dev/service_presence_soap_api_intro.htm
 - name: Service Cloud Voice Telephony Integration API
-  description: REST API for integrating telephony systems with Service Cloud Voice, enabling programmatic
-    management of voice calls, call recording, and real-time transcription within the service console.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_intro.htm
+  description: >-
+    REST API for integrating telephony systems with Service Cloud Voice, enabling programmatic management
+    of voice calls, call recording, and real-time transcription within the service console.
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  humanURL: >-
+    https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_intro.htm
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
   tags:
   - Call Center
@@ -334,16 +372,22 @@ apis:
   - Voice
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_intro.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_intro.htm
   - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_rest_overview.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_rest_overview.htm
   - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_rest_authorization.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.voice_developer_guide.meta/voice_developer_guide/voice_rest_authorization.htm
 - name: Service Cloud Voice for Partner Telephony API
-  description: Developer API for connecting third-party telephony systems to Service Cloud Voice, including
-    the Connector API for passing information between contact center platforms and Salesforce.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_dev_guide.htm
+  description: >-
+    Developer API for connecting third-party telephony systems to Service Cloud Voice, including the Connector
+    API for passing information between contact center platforms and Salesforce.
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  humanURL: >-
+    https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_dev_guide.htm
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
   tags:
   - Connector
@@ -352,14 +396,17 @@ apis:
   - Voice
   properties:
   - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_dev_guide.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_dev_guide.htm
   - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_connector_api_get_started.htm
+    url: >-
+      https://developer.salesforce.com/docs/atlas.en-us.voice_pt_developer_guide.meta/voice_pt_developer_guide/voice_pt_connector_api_get_started.htm
 - name: Agentforce Service Agent API
-  description: REST API for building and deploying AI-powered service agents using Agentforce, enabling
-    headless agent interactions, session management, and seamless escalation from AI agents to human service
-    representatives.
-  image: https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
+  description: >-
+    REST API for building and deploying AI-powered service agents using Agentforce, enabling headless
+    agent interactions, session management, and seamless escalation from AI agents to human service representatives.
+  image: >-
+    https://www.salesforce.com/content/dam/web/en_us/www/images/service/service-cloud-logo.png
   humanURL: https://developer.salesforce.com/docs/einstein/genai/guide/get-started-agents.html
   baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
   tags:
@@ -379,240 +426,6 @@ apis:
     url: https://developer.salesforce.com/docs/einstein/genai/guide/agent-api.html
   - type: GettingStarted
     url: https://developer.salesforce.com/docs/einstein/genai/guide/agent-api-get-started.html
-- name: Salesforce Service Cloud Accounts API
-  description: Operations for managing account records
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Account
-  tags_raw:
-  - Accounts
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-accounts-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Availability API
-  description: Agent availability and routing
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Availability
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-availability-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Cases API
-  description: Operations for managing customer service cases
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Cases
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-cases-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Contacts API
-  description: Operations for managing contact records
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Contacts
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-contacts-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Knowledge API
-  description: Operations for managing knowledge articles
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Knowledge
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-knowledge-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Messages API
-  description: Chat message operations
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Message
-  tags_raw:
-  - Messages
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-messages-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Query API
-  description: SOQL query operations
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Query
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-query-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Search API
-  description: SOSL search operations
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Search
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-search-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Sessions API
-  description: Chat session lifecycle management
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Sessions
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-sessions-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
-- name: Salesforce Service Cloud Settings API
-  description: Chat deployment settings
-  humanURL: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  baseURL: https://yourInstance.salesforce.com/services/data/v59.0/
-  tags:
-  - Settings
-  properties:
-  - type: OpenAPI
-    url: openapi/salesforce-service-cloud-settings-api-openapi.yml
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/
-  - type: Authentication
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_oauth_and_connected_apps.htm
-  - type: Reference
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm
-  - type: GettingStarted
-    url: https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm
-  - type: GraphQL
-    url: graphql/salesforce-service-cloud-graphql.md
-  - type: Documentation
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/
-  - type: APIReference
-    url: https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_requests.htm
 maintainers:
 - name: Salesforce
   email: developer@salesforce.com
