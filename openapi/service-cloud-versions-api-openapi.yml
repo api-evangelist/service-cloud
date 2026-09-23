@@ -16,12 +16,12 @@ servers:
 - url: https://runtime-api-ap-east.prod.chatbots.sfdc.sh
   description: Einstein Bots API - AP East
 tags:
-- name: versions
+- name: Versions
 paths:
   /versions:
     get:
       tags:
-      - versions
+      - Versions
       summary: Get API versions
       description: Retrieve the list of supported Einstein Bots API versions.
       operationId: getAPIVersions
@@ -31,25 +31,6 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
 components:
-  responses:
-    VersionsResponse:
-      description: Supported API versions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SupportedVersions'
-    ErrorResponse:
-      description: Something went wrong
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-      headers:
-        X-Request-ID:
-          description: Request ID. A UUID in string format to help with request tracking.
-          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
-          schema:
-            type: string
   schemas:
     Error:
       type: object
@@ -103,6 +84,25 @@ components:
       required:
       - versions
       additionalProperties: false
+  responses:
+    ErrorResponse:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      headers:
+        X-Request-ID:
+          description: Request ID. A UUID in string format to help with request tracking.
+          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: string
+    VersionsResponse:
+      description: Supported API versions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SupportedVersions'
   securitySchemes:
     chatbotAuth:
       type: oauth2

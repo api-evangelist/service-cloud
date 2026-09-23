@@ -16,12 +16,12 @@ servers:
 - url: https://runtime-api-ap-east.prod.chatbots.sfdc.sh
   description: Einstein Bots API - AP East
 tags:
-- name: health
+- name: Health
 paths:
   /status:
     get:
       tags:
-      - health
+      - Health
       summary: Check the health status
       description: Returns whether the status of Einstein Bots API is up or down.
       operationId: checkHealthStatus
@@ -31,25 +31,6 @@ paths:
         default:
           $ref: '#/components/responses/ErrorResponse'
 components:
-  responses:
-    ErrorResponse:
-      description: Something went wrong
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-      headers:
-        X-Request-ID:
-          description: Request ID. A UUID in string format to help with request tracking.
-          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
-          schema:
-            type: string
-    StatusResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Status'
   schemas:
     Status:
       type: object
@@ -95,6 +76,25 @@ components:
       - message
       - timestamp
       additionalProperties: false
+  responses:
+    ErrorResponse:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      headers:
+        X-Request-ID:
+          description: Request ID. A UUID in string format to help with request tracking.
+          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: string
+    StatusResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
   securitySchemes:
     chatbotAuth:
       type: oauth2

@@ -1,0 +1,27 @@
+{
+  "provider": "service-cloud",
+  "sources": [
+    "_original/service-cloud-einstein-bots-openapi.yml"
+  ],
+  "outputs": [
+    "service-cloud-bot-api-openapi.yml",
+    "service-cloud-health-api-openapi.yml",
+    "service-cloud-versions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "service-cloud-einstein-bots-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "service-cloud-einstein-bots-openapi.yml: declared missing tag: bot",
+    "service-cloud-einstein-bots-openapi.yml: declared missing tag: health",
+    "service-cloud-einstein-bots-openapi.yml: declared missing tag: versions",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "service-cloud-bot-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "service-cloud-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "service-cloud-versions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

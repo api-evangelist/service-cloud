@@ -16,12 +16,12 @@ servers:
 - url: https://runtime-api-ap-east.prod.chatbots.sfdc.sh
   description: Einstein Bots API - AP East
 tags:
-- name: bot
+- name: Bot
 paths:
   /v5.3.0/bots/{bot-id}/sessions:
     post:
       tags:
-      - bot
+      - Bot
       summary: Start a session
       description: Send a message to the bots API to start a new session.
       operationId: startSession
@@ -82,7 +82,7 @@ paths:
   /v5.3.0/sessions/{session-id}/messages:
     post:
       tags:
-      - bot
+      - Bot
       summary: Continue an active session
       description: Send a message to the bots API on an active session.
       operationId: continueSession
@@ -148,7 +148,7 @@ paths:
   /v5.3.0/sessions/{session-id}:
     delete:
       tags:
-      - bot
+      - Bot
       summary: End an active session
       description: Send a message to the bots API to end a session
       operationId: endSession
@@ -214,24 +214,45 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
 components:
   responses:
-    ForbiddenError:
-      description: User forbidden from accessing the resource
+    ServerBusyError:
+      description: Server is busy and cannot process the request at this time
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            status: 403
+            status: 423
             path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
             requestId: 19c056ab-d909-49df-b976-65e56b6ab214
-            error: ForbiddenError
-            message: User forbidden from accessing the resource
+            error: ServerBusyError
+            message: Server is busy and cannot process the request at this time
             timestamp: 1531245973799
             additionalProp1: {}
       headers:
         X-Request-ID:
           description: Request ID. A UUID in string format to help with request tracking.
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: string
+    SuccessfulResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseEnvelope'
+      headers:
+        X-Request-ID:
+          description: Request ID. A UUID in string format to help with request tracking.
+          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
+          schema:
+            type: string
+        X-Runtime-CRC:
+          description: Internal runtime CRC unique to the request.
+          schema:
+            type: string
+        X-Bot-Mode:
+          description: Bot mode.
+          example: default
           schema:
             type: string
     SuccessfulChatMessageResponse:
@@ -250,26 +271,6 @@ components:
           description: Internal runtime CRC.
           schema:
             type: string
-    BadRequestError:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            status: 400
-            path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
-            requestId: 19c056ab-d909-49df-b976-65e56b6ab214
-            error: BadRequestError
-            message: Bad Request
-            timestamp: 1531245973799
-            additionalProp1: {}
-      headers:
-        X-Request-ID:
-          description: Request ID. A UUID in string format to help with request tracking.
-          example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
-          schema:
-            type: string
     ErrorResponse:
       description: Something went wrong
       content:
@@ -282,20 +283,19 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
-    ServerBusyError:
-      description: Server is busy and cannot process the request at this time
+    UnauthorizedError:
+      description: Access bearer token is missing or invalid
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            status: 423
+            status: 401
             path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
             requestId: 19c056ab-d909-49df-b976-65e56b6ab214
-            error: ServerBusyError
-            message: Server is busy and cannot process the request at this time
+            error: UnauthorizedError
+            message: Access bearer token is missing or invalid
             timestamp: 1531245973799
-            additionalProp1: {}
       headers:
         X-Request-ID:
           description: Request ID. A UUID in string format to help with request tracking.
@@ -322,44 +322,44 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
-    UnauthorizedError:
-      description: Access bearer token is missing or invalid
+    TooManyRequestsError:
+      description: Too many requests for the server to handle
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            status: 401
+            status: 429
             path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
             requestId: 19c056ab-d909-49df-b976-65e56b6ab214
-            error: UnauthorizedError
-            message: Access bearer token is missing or invalid
+            error: TooManyRequestsError
+            message: Too many requests for the server to handle
             timestamp: 1531245973799
+            additionalProp1: {}
       headers:
         X-Request-ID:
           description: Request ID. A UUID in string format to help with request tracking.
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
-    SuccessfulResponse:
-      description: OK
+    ForbiddenError:
+      description: User forbidden from accessing the resource
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseEnvelope'
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 403
+            path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
+            requestId: 19c056ab-d909-49df-b976-65e56b6ab214
+            error: ForbiddenError
+            message: User forbidden from accessing the resource
+            timestamp: 1531245973799
+            additionalProp1: {}
       headers:
         X-Request-ID:
           description: Request ID. A UUID in string format to help with request tracking.
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
-          schema:
-            type: string
-        X-Runtime-CRC:
-          description: Internal runtime CRC unique to the request.
-          schema:
-            type: string
-        X-Bot-Mode:
-          description: Bot mode.
-          example: default
           schema:
             type: string
     RequestProcessingException:
@@ -402,18 +402,18 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
-    TooManyRequestsError:
-      description: Too many requests for the server to handle
+    BadRequestError:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            status: 429
+            status: 400
             path: /v1/00DRM00000067To/chatbots/HelloWorldBot/messages
             requestId: 19c056ab-d909-49df-b976-65e56b6ab214
-            error: TooManyRequestsError
-            message: Too many requests for the server to handle
+            error: BadRequestError
+            message: Bad Request
             timestamp: 1531245973799
             additionalProp1: {}
       headers:
@@ -423,48 +423,134 @@ components:
           schema:
             type: string
   schemas:
-    ResponseEnvelope:
+    ObjectVariable:
       type: object
       properties:
-        sessionId:
-          $ref: '#/components/schemas/ResponseSessionId'
-        botVersion:
-          $ref: '#/components/schemas/BotVersion'
-        processedSequenceIds:
-          description: Sequence IDs of messages that the bot processed. Except for the initial request to start the session, all requests require a `sequenceId`.
-          type: array
-          items:
-            format: int64
-            type: integer
-            example: 1
-        messages:
-          description: Messages from the bot.
-          type: array
-          minimum: 0
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/TextResponseMessage'
-            - $ref: '#/components/schemas/ChoicesResponseMessage'
-            - $ref: '#/components/schemas/EscalateResponseMessage'
-            - $ref: '#/components/schemas/SessionEndedResponseMessage'
-        variables:
-          $ref: '#/components/schemas/Variables'
-        metrics:
-          description: Session metrics.
-          type: object
-          additionalProperties: false
-        intents:
-          $ref: '#/components/schemas/Intents'
-        entities:
-          $ref: '#/components/schemas/Entities'
-        _links:
-          $ref: '#/components/schemas/Links'
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: contact
+        type:
+          description: Variable type of an object variable.
+          type: string
+          enum:
+          - object
+          example: object
+        value:
+          description: Variable value is an object.
+          allOf:
+          - $ref: '#/components/schemas/Variables'
+          example:
+          - name: fullName
+            type: text
+            value: Matt Smith
       required:
-      - sessionId
-      - botVersion
-      - processedSequenceIds
-      - messages
-      - _links
+      - name
+      - type
+      - value
+      additionalProperties: false
+    IntentSource:
+      description: 'Prediction system that detects the intent.
+
+
+        * `DIRECT`—Utterance search or an exact match
+
+        * `CORE_NLP`—Third-party Natural Language Processing (NLP)
+
+        * `EINSTEIN_NLP`—Einstein NLP
+
+        '
+      type: string
+      enum:
+      - DIRECT
+      - CORE_NLP
+      - EINSTEIN_NLP
+      example: EINSTEIN_NLP
+    DateVariable:
+      type: object
+      properties:
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: orderDate
+        type:
+          description: Variable type of a date variable.
+          type: string
+          enum:
+          - date
+          example: date
+        value:
+          description: Date in format ISO_LOCAL_DATE 'YYYY-MM-DD'.
+          type:
+          - string
+          - 'null'
+          example: '2021-09-21'
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    ExternalSessionKey:
+      description: UUID in string format for the conversation. You can use this parameter to trace the conversation in your bot's event logs.
+      type: string
+      example: 57904eb6-5352-4c5e-adf6-5f100572cf5d
+    SequenceId:
+      description: Client-generated sequence number of the message in a session. Increase this number for each subsequent message.
+      format: int64
+      type: integer
+      example: 1
+    TextInitMessage:
+      type: object
+      properties:
+        text:
+          description: Initial message from the customer to the bot to begin a session.
+          type: string
+          example: Hello
+      additionalProperties: false
+    EntityType:
+      description: System or custom entity Type ([What’s an Entity?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_an_entity.htm&type=5)).
+      type: string
+      example: MONEY
+    TextMessage:
+      type: object
+      properties:
+        type:
+          description: Message type for replying to the bot through text.
+          type: string
+          enum:
+          - text
+          example: text
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        text:
+          description: Text reply to the bot. To answer a question with choices with a text message, type the `choiceLabel`.
+          type: string
+      required:
+      - type
+      - sequenceId
+      - text
+      additionalProperties: false
+    NormalizedEntity:
+      type: object
+      properties:
+        confidenceScore:
+          description: Probability number that the AI assigns to this entity.
+          type: number
+          example: 0.4
+        value:
+          description: Value of the entity that the customer enters.
+          type: string
+          example: USD 30.0
+        type:
+          $ref: '#/components/schemas/EntityType'
+        entitySource:
+          $ref: '#/components/schemas/EntitySource'
+      required:
+      - confidenceScore
+      - value
+      - type
       additionalProperties: false
     TransferFailedRequestMessage:
       type: object
@@ -496,6 +582,100 @@ components:
       - sequenceId
       - reason
       additionalProperties: false
+    HyperLink:
+      description: Hyperlink object included in the Links schema
+      type: object
+      properties:
+        href:
+          description: Link to the endpoint
+          type: string
+          example: https://runtime-api-ap-east.prod.chatbots.sfdc.sh/v5.0.0/sessions
+    Intents:
+      description: 'Array of the intents detected by the bot when processing the request. For a bot, "intent" refers to the goal the customer
+
+        (see [Use Intents to Understand Your Customers](https://help.salesforce.com/s/articleView?id=sf.bots_service_train_bot.htm&type=5&_ga=2.5901875.1281711304.1657558186-1967832163.1652719780)).
+
+        '
+      type: array
+      minimum: 0
+      items:
+        $ref: '#/components/schemas/NormalizedIntent'
+    ResponseOptionsVariables:
+      type: object
+      description: Variables returned in the response.
+      properties:
+        include:
+          type: boolean
+          example: true
+          description: Indicates whether to include variables in the response.
+        filter:
+          type:
+          - array
+          - 'null'
+          example:
+          - OrderQty
+          - OrderType
+          description: Filter the returned variables. If missing, null, or empty, no filtering is applied.
+          items:
+            type: string
+            description: Variable name to filter the returned variables on.
+            example: OrderQty
+        onlyChanged:
+          type: boolean
+          example: true
+          description: Indicates whether the response contains only changed variables.
+      required:
+      - include
+      - onlyChanged
+      additionalProperties: false
+    RedirectMessage:
+      type: object
+      properties:
+        type:
+          description: Message type for the redirecting the client to another bot flow.
+          type: string
+          enum:
+          - redirect
+          example: redirect
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        dialogId:
+          type: string
+          description: Dialog ID to redirect to.
+          example: 68f934fb-e022-37a7-612e-b74fc87191d9
+      required:
+      - type
+      - sequenceId
+      - dialogId
+      additionalProperties: false
+    FeedbackId:
+      type: string
+      description: unique ID to identify the generation, used to submit feedback
+      example: 9247bbd8-5ed9-11ee-8c99-0242ac120002
+    BooleanVariable:
+      type: object
+      properties:
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: isShipped
+        type:
+          description: Variable type of a boolean variable.
+          type: string
+          enum:
+          - boolean
+          example: boolean
+        value:
+          description: Boolean value.
+          type:
+          - boolean
+          - 'null'
+          example: true
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
     MoneyVariable:
       type: object
       properties:
@@ -520,238 +700,6 @@ components:
       - type
       - value
       additionalProperties: false
-    NormalizedEntity:
-      type: object
-      properties:
-        confidenceScore:
-          description: Probability number that the AI assigns to this entity.
-          type: number
-          example: 0.4
-        value:
-          description: Value of the entity that the customer enters.
-          type: string
-          example: USD 30.0
-        type:
-          $ref: '#/components/schemas/EntityType'
-        entitySource:
-          $ref: '#/components/schemas/EntitySource'
-      required:
-      - confidenceScore
-      - value
-      - type
-      additionalProperties: false
-    TextResponseMessage:
-      type: object
-      properties:
-        type:
-          description: Message type of a text message to the customer.
-          type: string
-          enum:
-          - text
-          example: text
-        id:
-          $ref: '#/components/schemas/MessageId'
-        text:
-          description: Message from the bot.
-          type: string
-          example: Hello world!
-        schedule:
-          $ref: '#/components/schemas/Schedule'
-        feedbackId:
-          $ref: '#/components/schemas/FeedbackId'
-      required:
-      - type
-      - id
-      - text
-      additionalProperties: false
-    ChatMessageEnvelope:
-      type: object
-      properties:
-        message:
-          description: Message to the bot.
-          oneOf:
-          - $ref: '#/components/schemas/ChoiceMessage'
-          - $ref: '#/components/schemas/TextMessage'
-          - $ref: '#/components/schemas/TransferSucceededRequestMessage'
-          - $ref: '#/components/schemas/TransferFailedRequestMessage'
-          - $ref: '#/components/schemas/RedirectMessage'
-          - $ref: '#/components/schemas/SetVariablesMessage'
-        responseOptions:
-          $ref: '#/components/schemas/ResponseOptions'
-      required:
-      - message
-      additionalProperties: false
-    SetVariablesMessage:
-      type: object
-      description: Update existing session variables
-      properties:
-        type:
-          description: Message type
-          type: string
-          enum:
-          - setVariables
-        sequenceId:
-          $ref: '#/components/schemas/SequenceId'
-        variables:
-          $ref: '#/components/schemas/Variables'
-      required:
-      - type
-      - sequenceId
-      - variables
-      additionalProperties: false
-    FeedbackId:
-      type: string
-      description: unique ID to identify the generation, used to submit feedback
-      example: 9247bbd8-5ed9-11ee-8c99-0242ac120002
-    Links:
-      description: List of Einstein Bots API endpoints for HATEOS compliancy.
-      type: object
-      properties:
-        self:
-          $ref: '#/components/schemas/HyperLink'
-        messages:
-          $ref: '#/components/schemas/HyperLink'
-        session:
-          $ref: '#/components/schemas/HyperLink'
-      required:
-      - self
-      additionalProperties: false
-    ObjectVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: contact
-        type:
-          description: Variable type of an object variable.
-          type: string
-          enum:
-          - object
-          example: object
-        value:
-          description: Variable value is an object.
-          allOf:
-          - $ref: '#/components/schemas/Variables'
-          example:
-          - name: fullName
-            type: text
-            value: Matt Smith
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
-    ListVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: target
-        type:
-          description: Object variable that contains a list.
-          type: string
-          enum:
-          - list
-          example: list
-        value:
-          description: Array of objects.
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-          example:
-          - type: ref
-            value: 1M5xx000000000BCAQ
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
-    TextMessage:
-      type: object
-      properties:
-        type:
-          description: Message type for replying to the bot through text.
-          type: string
-          enum:
-          - text
-          example: text
-        sequenceId:
-          $ref: '#/components/schemas/SequenceId'
-        inReplyToMessageId:
-          $ref: '#/components/schemas/InReplyToMessageId'
-        text:
-          description: Text reply to the bot. To answer a question with choices with a text message, type the `choiceLabel`.
-          type: string
-      required:
-      - type
-      - sequenceId
-      - text
-      additionalProperties: false
-    ExternalSessionKey:
-      description: UUID in string format for the conversation. You can use this parameter to trace the conversation in your bot's event logs.
-      type: string
-      example: 57904eb6-5352-4c5e-adf6-5f100572cf5d
-    ChatMessageResponseEnvelope:
-      type: object
-      properties:
-        botVersion:
-          $ref: '#/components/schemas/BotVersion'
-        processedSequenceIds:
-          description: Sequence IDs of processed messages.
-          type: array
-          example: 1, 2
-          items:
-            format: int64
-            type: integer
-        messages:
-          description: Messages from the bot.
-          type: array
-          minimum: 0
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/TextResponseMessage'
-            - $ref: '#/components/schemas/ChoicesResponseMessage'
-            - $ref: '#/components/schemas/EscalateResponseMessage'
-            - $ref: '#/components/schemas/SessionEndedResponseMessage'
-        variables:
-          $ref: '#/components/schemas/Variables'
-        metrics:
-          description: Session metrics.
-          type: object
-          additionalProperties: false
-        intents:
-          $ref: '#/components/schemas/Intents'
-        entities:
-          $ref: '#/components/schemas/Entities'
-        _links:
-          $ref: '#/components/schemas/Links'
-      required:
-      - botVersion
-      - processedSequenceIds
-      - messages
-      - _links
-      additionalProperties: false
-    EntityType:
-      description: System or custom entity Type ([What’s an Entity?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_an_entity.htm&type=5)).
-      type: string
-      example: MONEY
-    TextInitMessage:
-      type: object
-      properties:
-        text:
-          description: Initial message from the customer to the bot to begin a session.
-          type: string
-          example: Hello
-      additionalProperties: false
-    SequenceId:
-      description: Client-generated sequence number of the message in a session. Increase this number for each subsequent message.
-      format: int64
-      type: integer
-      example: 1
     Error:
       type: object
       properties:
@@ -783,163 +731,40 @@ components:
       - message
       - timestamp
       additionalProperties: false
-    ResponseOptionsVariables:
-      type: object
-      description: Variables returned in the response.
-      properties:
-        include:
-          type: boolean
-          example: true
-          description: Indicates whether to include variables in the response.
-        filter:
-          type:
-          - array
-          - 'null'
-          example:
-          - OrderQty
-          - OrderType
-          description: Filter the returned variables. If missing, null, or empty, no filtering is applied.
-          items:
-            type: string
-            description: Variable name to filter the returned variables on.
-            example: OrderQty
-        onlyChanged:
-          type: boolean
-          example: true
-          description: Indicates whether the response contains only changed variables.
-      required:
-      - include
-      - onlyChanged
-      additionalProperties: false
-    SessionEndedResponseMessage:
-      type: object
-      properties:
-        type:
-          description: Message type informing that the session ended.
-          type: string
-          enum:
-          - sessionEnded
-          example: sessionEnded
-        id:
-          $ref: '#/components/schemas/MessageId'
-        reason:
-          description: Reason the session ended.
-          type: string
-          enum:
-          - ClientRequest
-          - TransferFailedNotConfigured
-          - Action
-          - Error
-          - InfiniteLoopDetected
-          example: ClientRequest
-        schedule:
-          $ref: '#/components/schemas/Schedule'
-        feedbackId:
-          $ref: '#/components/schemas/FeedbackId'
-      required:
-      - type
-      - id
-      - reason
-      additionalProperties: false
-    HyperLink:
-      description: Hyperlink object included in the Links schema
-      type: object
-      properties:
-        href:
-          description: Link to the endpoint
-          type: string
-          example: https://runtime-api-ap-east.prod.chatbots.sfdc.sh/v5.0.0/sessions
-    ResponseSessionId:
-      description: Bot runtime session ID.
-      type: string
-      example: 57904eb6-5352-4c5e-adf6-5f100572cf5d
-    BotVersion:
-      description: Bot configuration version.
-      type:
-      - string
-      - 'null'
-      example: 0X9RM0000004CD00AM
-    EntitySource:
-      description: '"Prediction system that detects the entity. The Bot API can call NLPs or it can figure out the entity by itself."
-
-
-        * `BOT_SERVICE`—Bot detects entity without Natural Language Processing (NLP)
-
-        * `CORE_NLP`—Third-party NLP
-
-        * `EINSTEIN_NLP`—Einstein NLP
-
-        '
-      type: string
-      enum:
-      - BOT_SERVICE
-      - CORE_NLP
-      - EINSTEIN_NLP
-      example: EINSTEIN_NLP
-    DateVariable:
+    NumberVariable:
       type: object
       properties:
         name:
           description: API name of a variable defined in the bot definition.
           type: string
-          example: orderDate
+          example: qty
         type:
-          description: Variable type of a date variable.
+          description: Variable type of a number variable.
           type: string
           enum:
-          - date
-          example: date
+          - number
+          example: number
         value:
-          description: Date in format ISO_LOCAL_DATE 'YYYY-MM-DD'.
+          description: Variable value in number format.
           type:
-          - string
+          - number
           - 'null'
-          example: '2021-09-21'
+          example: 10
       required:
       - name
       - type
       - value
       additionalProperties: false
-    IntentSource:
-      description: 'Prediction system that detects the intent.
-
-
-        * `DIRECT`—Utterance search or an exact match
-
-        * `CORE_NLP`—Third-party Natural Language Processing (NLP)
-
-        * `EINSTEIN_NLP`—Einstein NLP
-
-        '
-      type: string
-      enum:
-      - DIRECT
-      - CORE_NLP
-      - EINSTEIN_NLP
-      example: EINSTEIN_NLP
-    RefVariable:
+    ForceConfig:
       type: object
+      description: API configuration parameters.
       properties:
-        name:
-          description: API name of a variable defined in the bot definition.
+        endpoint:
+          description: Instance URL of your Salesforce org. You can find the value in the **ForceConfig Endpoint** field of the **Add Connection** dialog when you add the connected app to the bot (see [Get Started with Einstein Bot API](https://developer.salesforce.com/docs/service/einstein-bot-api/guide/prerequisites.html)).
           type: string
-          example: target
-        type:
-          description: Variable type of a reference ID variable.
-          type: string
-          enum:
-          - ref
-          example: ref
-        value:
-          description: Variable value in reference ID format.
-          type:
-          - string
-          - 'null'
-          example: 1M5xx000000000BCAQ
+          example: https://d5e000009s7bceah-dev-ed.my.salesforce.com/
       required:
-      - name
-      - type
-      - value
+      - endpoint
       additionalProperties: false
     InitMessageEnvelope:
       type: object
@@ -971,311 +796,28 @@ components:
       - forceConfig
       - externalSessionKey
       additionalProperties: false
-    Intents:
-      description: 'Array of the intents detected by the bot when processing the request. For a bot, "intent" refers to the goal the customer
-
-        (see [Use Intents to Understand Your Customers](https://help.salesforce.com/s/articleView?id=sf.bots_service_train_bot.htm&type=5&_ga=2.5901875.1281711304.1657558186-1967832163.1652719780)).
-
-        '
-      type: array
-      minimum: 0
-      items:
-        $ref: '#/components/schemas/NormalizedIntent'
-    Schedule:
+    NormalizedIntent:
       type: object
       properties:
-        responseDelayMilliseconds:
-          description: Delay in ms to display the bot's message to the user. This parameter is set by the bot admin when creating the bot.
-          type: integer
-          format: int32
-          example: 1200
+        label:
+          description: Name or ID of the intent.
+          type: string
+          example: Password help
+        confidenceScore:
+          description: Probability number that the AI assigns to this intent.
+          type: number
+          example: 0.78
+        intentSource:
+          $ref: '#/components/schemas/IntentSource'
       required:
-      - responseDelayMilliseconds
+      - label
+      - confidenceScore
+      - intentSource
       additionalProperties: false
-    TransferSucceededRequestMessage:
-      type: object
-      properties:
-        type:
-          description: Message type for the client to inform the bot that the client successfully transferred the session to another target.
-          type: string
-          enum:
-          - transferSucceeded
-          example: transferSucceeded
-        sequenceId:
-          $ref: '#/components/schemas/SequenceId'
-        inReplyToMessageId:
-          $ref: '#/components/schemas/InReplyToMessageId'
-      required:
-      - type
-      - sequenceId
-      additionalProperties: false
-    EscalateResponseMessage:
-      type: object
-      properties:
-        type:
-          description: Message type of an escalation message.
-          type: string
-          enum:
-          - escalate
-          example: escalate
-        id:
-          $ref: '#/components/schemas/MessageId'
-        schedule:
-          $ref: '#/components/schemas/Schedule'
-        feedbackId:
-          $ref: '#/components/schemas/FeedbackId'
-        targets:
-          type: array
-          minimum: 0
-          description: Array of transfer targets.
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-                description: Type of the transfer target.
-                enum:
-                - Salesforce:Core:Bot:Id
-                - Salesforce:Core:Queue:Id
-                - Salesforce:Core:Skill:Id
-                - Salesforce:Core:Flow:Id
-                example: Salesforce:Core:Bot:Id
-              value:
-                type: string
-                description: ID of the transfer target.
-            required:
-            - value
-            - type
-            additionalProperties: false
-      required:
-      - type
-      - id
-      - targets
-      additionalProperties: false
-    RedirectMessage:
-      type: object
-      properties:
-        type:
-          description: Message type for the redirecting the client to another bot flow.
-          type: string
-          enum:
-          - redirect
-          example: redirect
-        sequenceId:
-          $ref: '#/components/schemas/SequenceId'
-        dialogId:
-          type: string
-          description: Dialog ID to redirect to.
-          example: 68f934fb-e022-37a7-612e-b74fc87191d9
-      required:
-      - type
-      - sequenceId
-      - dialogId
-      additionalProperties: false
-    NumberVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: qty
-        type:
-          description: Variable type of a number variable.
-          type: string
-          enum:
-          - number
-          example: number
-        value:
-          description: Variable value in number format.
-          type:
-          - number
-          - 'null'
-          example: 10
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
-    ResponseOptions:
-      type: object
-      description: Configuration of additional information returned in the response payload.
-      properties:
-        variables:
-          $ref: '#/components/schemas/ResponseOptionsVariables'
-        metrics:
-          type: boolean
-          description: Indicates whether to include metrics in the response.
-        intents:
-          type: boolean
-          description: Indicates whether to include all intents detected when processing the current request.
-        entities:
-          type: boolean
-          description: Indicates whether to include all entities detected when processing the current request.
-      additionalProperties: false
-    BooleanVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: isShipped
-        type:
-          description: Variable type of a boolean variable.
-          type: string
-          enum:
-          - boolean
-          example: boolean
-        value:
-          description: Boolean value.
-          type:
-          - boolean
-          - 'null'
-          example: true
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
-    ForceConfig:
-      type: object
-      description: API configuration parameters.
-      properties:
-        endpoint:
-          description: Instance URL of your Salesforce org. You can find the value in the **ForceConfig Endpoint** field of the **Add Connection** dialog when you add the connected app to the bot (see [Get Started with Einstein Bot API](https://developer.salesforce.com/docs/service/einstein-bot-api/guide/prerequisites.html)).
-          type: string
-          example: https://d5e000009s7bceah-dev-ed.my.salesforce.com/
-      required:
-      - endpoint
-      additionalProperties: false
-    DateTimeVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: orderDateTime
-        type:
-          description: Variable type of a datetime variable.
-          type: string
-          enum:
-          - dateTime
-          example: dateTime
-        value:
-          description: Datetime in format ISO_LOCAL_DATE_TIME 'YYYY-MM-DDTHH:MM:SS'.
-          type:
-          - string
-          - 'null'
-          example: '2018-09-21T14:30:00'
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
-    Entities:
-      description: Array of all entities detected by the bot when processing this request. For a bot, "Entities" refer to the modifiers the customer uses to describe their issue and intent is what they really mean.
-      type: array
-      minimum: 0
-      items:
-        $ref: '#/components/schemas/NormalizedEntity'
-    EndSessionReason:
+    ResponseSessionId:
+      description: Bot runtime session ID.
       type: string
-      enum:
-      - UserRequest
-      - Transfer
-      - Expiration
-      - Error
-      - Other
-      example: Transfer
-    ChoiceMessage:
-      type: object
-      properties:
-        type:
-          description: Message type for answering a question with choices from the bot.
-          type: string
-          enum:
-          - choice
-          example: choice
-        sequenceId:
-          $ref: '#/components/schemas/SequenceId'
-        inReplyToMessageId:
-          $ref: '#/components/schemas/InReplyToMessageId'
-        choiceIndex:
-          description: Index or alias of the chosen answer. The index starts with 1. Either `choiceIndex` or `choiceId` is required.
-          type:
-          - integer
-          - 'null'
-          example: 1
-        choiceId:
-          description: ID of the answer when you answer by clicking a choice button. Either `choiceIndex` or `choiceId` is required.
-          type:
-          - string
-          - 'null'
-          example: 8a9a745f-0c09-4b13-955c-1ab9e06c7ad7
-      required:
-      - type
-      - sequenceId
-      additionalProperties: false
-    InReplyToMessageId:
-      description: Message ID of the previous response you are replying to.
-      type: string
-      example: a133c185-73a7-4adf-b6d9-b7fd62babb4e
-    Referrer:
-      type: object
-      properties:
-        type:
-          description: Referrer type.
-          type: string
-          enum:
-          - Salesforce:Core:Bot:Id
-          - Salesforce:BotRuntime:Session:Id
-          example: Salesforce:Core:Bot:Id
-        value:
-          type: string
-          description: ID of referrer.
-          example: string
-      required:
-      - type
-      - value
-    Variables:
-      type:
-      - array
-      - 'null'
-      description: Array of custom and context variables passed to the bot when initiating a session (see [What’s a Variable?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_a_variable.htm&type=5&_ga=2.50520745.1281711304.1657558186-1967832163.1652719780)).
-      items:
-        anyOf:
-        - $ref: '#/components/schemas/BooleanVariable'
-        - $ref: '#/components/schemas/DateVariable'
-        - $ref: '#/components/schemas/DateTimeVariable'
-        - $ref: '#/components/schemas/MoneyVariable'
-        - $ref: '#/components/schemas/NumberVariable'
-        - $ref: '#/components/schemas/TextVariable'
-        - $ref: '#/components/schemas/ObjectVariable'
-        - $ref: '#/components/schemas/RefVariable'
-        - $ref: '#/components/schemas/ListVariable'
-    TextVariable:
-      type: object
-      properties:
-        name:
-          description: API name of a variable defined in the bot definition.
-          type: string
-          example: note
-        type:
-          description: Variable type of a text variable.
-          type: string
-          enum:
-          - text
-          example: text
-        value:
-          description: Variable value in text format.
-          type:
-          - string
-          - 'null'
-          example: Thanks for your order!
-      required:
-      - name
-      - type
-      - value
-      additionalProperties: false
+      example: 57904eb6-5352-4c5e-adf6-5f100572cf5d
     ChoicesResponseMessage:
       type: object
       properties:
@@ -1336,28 +878,486 @@ components:
       - choices
       - widget
       additionalProperties: false
-    NormalizedIntent:
+    Entities:
+      description: Array of all entities detected by the bot when processing this request. For a bot, "Entities" refer to the modifiers the customer uses to describe their issue and intent is what they really mean.
+      type: array
+      minimum: 0
+      items:
+        $ref: '#/components/schemas/NormalizedEntity'
+    DateTimeVariable:
       type: object
       properties:
-        label:
-          description: Name or ID of the intent.
+        name:
+          description: API name of a variable defined in the bot definition.
           type: string
-          example: Password help
-        confidenceScore:
-          description: Probability number that the AI assigns to this intent.
-          type: number
-          example: 0.78
-        intentSource:
-          $ref: '#/components/schemas/IntentSource'
+          example: orderDateTime
+        type:
+          description: Variable type of a datetime variable.
+          type: string
+          enum:
+          - dateTime
+          example: dateTime
+        value:
+          description: Datetime in format ISO_LOCAL_DATE_TIME 'YYYY-MM-DDTHH:MM:SS'.
+          type:
+          - string
+          - 'null'
+          example: '2018-09-21T14:30:00'
       required:
-      - label
-      - confidenceScore
-      - intentSource
+      - name
+      - type
+      - value
+      additionalProperties: false
+    TextVariable:
+      type: object
+      properties:
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: note
+        type:
+          description: Variable type of a text variable.
+          type: string
+          enum:
+          - text
+          example: text
+        value:
+          description: Variable value in text format.
+          type:
+          - string
+          - 'null'
+          example: Thanks for your order!
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    EntitySource:
+      description: '"Prediction system that detects the entity. The Bot API can call NLPs or it can figure out the entity by itself."
+
+
+        * `BOT_SERVICE`—Bot detects entity without Natural Language Processing (NLP)
+
+        * `CORE_NLP`—Third-party NLP
+
+        * `EINSTEIN_NLP`—Einstein NLP
+
+        '
+      type: string
+      enum:
+      - BOT_SERVICE
+      - CORE_NLP
+      - EINSTEIN_NLP
+      example: EINSTEIN_NLP
+    InReplyToMessageId:
+      description: Message ID of the previous response you are replying to.
+      type: string
+      example: a133c185-73a7-4adf-b6d9-b7fd62babb4e
+    BotVersion:
+      description: Bot configuration version.
+      type:
+      - string
+      - 'null'
+      example: 0X9RM0000004CD00AM
+    Schedule:
+      type: object
+      properties:
+        responseDelayMilliseconds:
+          description: Delay in ms to display the bot's message to the user. This parameter is set by the bot admin when creating the bot.
+          type: integer
+          format: int32
+          example: 1200
+      required:
+      - responseDelayMilliseconds
+      additionalProperties: false
+    RefVariable:
+      type: object
+      properties:
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: target
+        type:
+          description: Variable type of a reference ID variable.
+          type: string
+          enum:
+          - ref
+          example: ref
+        value:
+          description: Variable value in reference ID format.
+          type:
+          - string
+          - 'null'
+          example: 1M5xx000000000BCAQ
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    ChatMessageEnvelope:
+      type: object
+      properties:
+        message:
+          description: Message to the bot.
+          oneOf:
+          - $ref: '#/components/schemas/ChoiceMessage'
+          - $ref: '#/components/schemas/TextMessage'
+          - $ref: '#/components/schemas/TransferSucceededRequestMessage'
+          - $ref: '#/components/schemas/TransferFailedRequestMessage'
+          - $ref: '#/components/schemas/RedirectMessage'
+          - $ref: '#/components/schemas/SetVariablesMessage'
+        responseOptions:
+          $ref: '#/components/schemas/ResponseOptions'
+      required:
+      - message
+      additionalProperties: false
+    Links:
+      description: List of Einstein Bots API endpoints for HATEOS compliancy.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HyperLink'
+        messages:
+          $ref: '#/components/schemas/HyperLink'
+        session:
+          $ref: '#/components/schemas/HyperLink'
+      required:
+      - self
+      additionalProperties: false
+    TransferSucceededRequestMessage:
+      type: object
+      properties:
+        type:
+          description: Message type for the client to inform the bot that the client successfully transferred the session to another target.
+          type: string
+          enum:
+          - transferSucceeded
+          example: transferSucceeded
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+      required:
+      - type
+      - sequenceId
+      additionalProperties: false
+    EndSessionReason:
+      type: string
+      enum:
+      - UserRequest
+      - Transfer
+      - Expiration
+      - Error
+      - Other
+      example: Transfer
+    Variables:
+      type:
+      - array
+      - 'null'
+      description: Array of custom and context variables passed to the bot when initiating a session (see [What’s a Variable?](https://help.salesforce.com/s/articleView?id=sf.bots_service_whats_a_variable.htm&type=5&_ga=2.50520745.1281711304.1657558186-1967832163.1652719780)).
+      items:
+        anyOf:
+        - $ref: '#/components/schemas/BooleanVariable'
+        - $ref: '#/components/schemas/DateVariable'
+        - $ref: '#/components/schemas/DateTimeVariable'
+        - $ref: '#/components/schemas/MoneyVariable'
+        - $ref: '#/components/schemas/NumberVariable'
+        - $ref: '#/components/schemas/TextVariable'
+        - $ref: '#/components/schemas/ObjectVariable'
+        - $ref: '#/components/schemas/RefVariable'
+        - $ref: '#/components/schemas/ListVariable'
+    ResponseEnvelope:
+      type: object
+      properties:
+        sessionId:
+          $ref: '#/components/schemas/ResponseSessionId'
+        botVersion:
+          $ref: '#/components/schemas/BotVersion'
+        processedSequenceIds:
+          description: Sequence IDs of messages that the bot processed. Except for the initial request to start the session, all requests require a `sequenceId`.
+          type: array
+          items:
+            format: int64
+            type: integer
+            example: 1
+        messages:
+          description: Messages from the bot.
+          type: array
+          minimum: 0
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/TextResponseMessage'
+            - $ref: '#/components/schemas/ChoicesResponseMessage'
+            - $ref: '#/components/schemas/EscalateResponseMessage'
+            - $ref: '#/components/schemas/SessionEndedResponseMessage'
+        variables:
+          $ref: '#/components/schemas/Variables'
+        metrics:
+          description: Session metrics.
+          type: object
+          additionalProperties: false
+        intents:
+          $ref: '#/components/schemas/Intents'
+        entities:
+          $ref: '#/components/schemas/Entities'
+        _links:
+          $ref: '#/components/schemas/Links'
+      required:
+      - sessionId
+      - botVersion
+      - processedSequenceIds
+      - messages
+      - _links
+      additionalProperties: false
+    ListVariable:
+      type: object
+      properties:
+        name:
+          description: API name of a variable defined in the bot definition.
+          type: string
+          example: target
+        type:
+          description: Object variable that contains a list.
+          type: string
+          enum:
+          - list
+          example: list
+        value:
+          description: Array of objects.
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+          example:
+          - type: ref
+            value: 1M5xx000000000BCAQ
+      required:
+      - name
+      - type
+      - value
+      additionalProperties: false
+    Referrer:
+      type: object
+      properties:
+        type:
+          description: Referrer type.
+          type: string
+          enum:
+          - Salesforce:Core:Bot:Id
+          - Salesforce:BotRuntime:Session:Id
+          example: Salesforce:Core:Bot:Id
+        value:
+          type: string
+          description: ID of referrer.
+          example: string
+      required:
+      - type
+      - value
+    EscalateResponseMessage:
+      type: object
+      properties:
+        type:
+          description: Message type of an escalation message.
+          type: string
+          enum:
+          - escalate
+          example: escalate
+        id:
+          $ref: '#/components/schemas/MessageId'
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        feedbackId:
+          $ref: '#/components/schemas/FeedbackId'
+        targets:
+          type: array
+          minimum: 0
+          description: Array of transfer targets.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                description: Type of the transfer target.
+                enum:
+                - Salesforce:Core:Bot:Id
+                - Salesforce:Core:Queue:Id
+                - Salesforce:Core:Skill:Id
+                - Salesforce:Core:Flow:Id
+                example: Salesforce:Core:Bot:Id
+              value:
+                type: string
+                description: ID of the transfer target.
+            required:
+            - value
+            - type
+            additionalProperties: false
+      required:
+      - type
+      - id
+      - targets
       additionalProperties: false
     MessageId:
       description: UUID that references this message.
       type: string
       example: a133c185-73a7-4adf-b6d9-b7fd62babb4e
+    ResponseOptions:
+      type: object
+      description: Configuration of additional information returned in the response payload.
+      properties:
+        variables:
+          $ref: '#/components/schemas/ResponseOptionsVariables'
+        metrics:
+          type: boolean
+          description: Indicates whether to include metrics in the response.
+        intents:
+          type: boolean
+          description: Indicates whether to include all intents detected when processing the current request.
+        entities:
+          type: boolean
+          description: Indicates whether to include all entities detected when processing the current request.
+      additionalProperties: false
+    SetVariablesMessage:
+      type: object
+      description: Update existing session variables
+      properties:
+        type:
+          description: Message type
+          type: string
+          enum:
+          - setVariables
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        variables:
+          $ref: '#/components/schemas/Variables'
+      required:
+      - type
+      - sequenceId
+      - variables
+      additionalProperties: false
+    SessionEndedResponseMessage:
+      type: object
+      properties:
+        type:
+          description: Message type informing that the session ended.
+          type: string
+          enum:
+          - sessionEnded
+          example: sessionEnded
+        id:
+          $ref: '#/components/schemas/MessageId'
+        reason:
+          description: Reason the session ended.
+          type: string
+          enum:
+          - ClientRequest
+          - TransferFailedNotConfigured
+          - Action
+          - Error
+          - InfiniteLoopDetected
+          example: ClientRequest
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        feedbackId:
+          $ref: '#/components/schemas/FeedbackId'
+      required:
+      - type
+      - id
+      - reason
+      additionalProperties: false
+    TextResponseMessage:
+      type: object
+      properties:
+        type:
+          description: Message type of a text message to the customer.
+          type: string
+          enum:
+          - text
+          example: text
+        id:
+          $ref: '#/components/schemas/MessageId'
+        text:
+          description: Message from the bot.
+          type: string
+          example: Hello world!
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+        feedbackId:
+          $ref: '#/components/schemas/FeedbackId'
+      required:
+      - type
+      - id
+      - text
+      additionalProperties: false
+    ChoiceMessage:
+      type: object
+      properties:
+        type:
+          description: Message type for answering a question with choices from the bot.
+          type: string
+          enum:
+          - choice
+          example: choice
+        sequenceId:
+          $ref: '#/components/schemas/SequenceId'
+        inReplyToMessageId:
+          $ref: '#/components/schemas/InReplyToMessageId'
+        choiceIndex:
+          description: Index or alias of the chosen answer. The index starts with 1. Either `choiceIndex` or `choiceId` is required.
+          type:
+          - integer
+          - 'null'
+          example: 1
+        choiceId:
+          description: ID of the answer when you answer by clicking a choice button. Either `choiceIndex` or `choiceId` is required.
+          type:
+          - string
+          - 'null'
+          example: 8a9a745f-0c09-4b13-955c-1ab9e06c7ad7
+      required:
+      - type
+      - sequenceId
+      additionalProperties: false
+    ChatMessageResponseEnvelope:
+      type: object
+      properties:
+        botVersion:
+          $ref: '#/components/schemas/BotVersion'
+        processedSequenceIds:
+          description: Sequence IDs of processed messages.
+          type: array
+          example: 1, 2
+          items:
+            format: int64
+            type: integer
+        messages:
+          description: Messages from the bot.
+          type: array
+          minimum: 0
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/TextResponseMessage'
+            - $ref: '#/components/schemas/ChoicesResponseMessage'
+            - $ref: '#/components/schemas/EscalateResponseMessage'
+            - $ref: '#/components/schemas/SessionEndedResponseMessage'
+        variables:
+          $ref: '#/components/schemas/Variables'
+        metrics:
+          description: Session metrics.
+          type: object
+          additionalProperties: false
+        intents:
+          $ref: '#/components/schemas/Intents'
+        entities:
+          $ref: '#/components/schemas/Entities'
+        _links:
+          $ref: '#/components/schemas/Links'
+      required:
+      - botVersion
+      - processedSequenceIds
+      - messages
+      - _links
+      additionalProperties: false
   securitySchemes:
     chatbotAuth:
       type: oauth2
