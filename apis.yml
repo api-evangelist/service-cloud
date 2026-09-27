@@ -79,6 +79,11 @@ apis:
   - Cases
   - Escalation
   - Routing
+  - Ticketing
+  tags_raw:
+  - Cases
+  - Escalation
+  - Routing
   - Tickets
   properties:
   - type: Documentation

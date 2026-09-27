@@ -32,19 +32,6 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
 components:
   schemas:
-    Status:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Health status of Einstein Bots API.
-          enum:
-          - UP
-          - DOWN
-          example: UP
-      required:
-      - status
-      additionalProperties: false
     Error:
       type: object
       properties:
@@ -75,6 +62,19 @@ components:
       - error
       - message
       - timestamp
+      additionalProperties: false
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Health status of Einstein Bots API.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+      required:
+      - status
       additionalProperties: false
   responses:
     ErrorResponse:
