@@ -85,12 +85,6 @@ components:
       - versions
       additionalProperties: false
   responses:
-    VersionsResponse:
-      description: Supported API versions
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SupportedVersions'
     ErrorResponse:
       description: Something went wrong
       content:
@@ -103,6 +97,12 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
+    VersionsResponse:
+      description: Supported API versions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SupportedVersions'
   securitySchemes:
     chatbotAuth:
       type: oauth2
