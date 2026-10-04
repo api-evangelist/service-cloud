@@ -77,6 +77,12 @@ components:
       - status
       additionalProperties: false
   responses:
+    StatusResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
     ErrorResponse:
       description: Something went wrong
       content:
@@ -89,12 +95,6 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
-    StatusResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Status'
   securitySchemes:
     chatbotAuth:
       type: oauth2
