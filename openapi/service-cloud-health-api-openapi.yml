@@ -32,6 +32,19 @@ paths:
           $ref: '#/components/responses/ErrorResponse'
 components:
   schemas:
+    Status:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Health status of Einstein Bots API.
+          enum:
+          - UP
+          - DOWN
+          example: UP
+      required:
+      - status
+      additionalProperties: false
     Error:
       type: object
       properties:
@@ -63,26 +76,7 @@ components:
       - message
       - timestamp
       additionalProperties: false
-    Status:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Health status of Einstein Bots API.
-          enum:
-          - UP
-          - DOWN
-          example: UP
-      required:
-      - status
-      additionalProperties: false
   responses:
-    StatusResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Status'
     ErrorResponse:
       description: Something went wrong
       content:
@@ -95,6 +89,12 @@ components:
           example: 36a73651-a46d-4d16-9a8a-fd436ed62e1a
           schema:
             type: string
+    StatusResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Status'
   securitySchemes:
     chatbotAuth:
       type: oauth2
