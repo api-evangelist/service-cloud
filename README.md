@@ -1,4 +1,4 @@
-# Salesforce Service Cloud APIs (service-cloud)
+# Salesforce Service Cloud APIs
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,157 +64,164 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-A collection of APIs for Salesforce Service Cloud, enabling customer service and support operations
+Salesforce Service Cloud is the customer-service and contact-centre product on the Salesforce Platform, and its API surface is the Salesforce Platform API applied to service objects — Case, CaseComment, Knowledge articles, LiveChatTranscript, MessagingSession, entitlements and omni-channel routing — reached through the REST, SOAP, Bulk and Composite APIs. Alongside that record layer Salesforce ships purpose-built runtimes with their own contracts: an OpenAPI 3.0 document for the Einstein Bots Runtime API, a gRPC/protobuf contract for the Pub/Sub event API, a CometD Streaming API, and generally available hosted MCP servers that expose the sObject layer to AI agents over OAuth. There is no single global API host — every call is made against the customer's own org at the instance_url returned with the OAuth token, on API version 67.0 (Summer '26). Authentication is OAuth 2.0 only; Salesforce issues no API keys.
 
-**URL:** [Visit APIs.json URL](https://api.salesforce.com/apis.json)
+**Areas:** Cloud · CRM · Customer Service · Enterprise · Salesforce · Support
 
-## Tags:
+## Salesforce Service Cloud APIs on APIs.io
 
- - customer-service, support, CRM, cloud, enterprise, salesforce
+Everything profiled for Salesforce Service Cloud APIs is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/service-cloud/](https://apis.io/providers/service-cloud/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (19)
 
-- **Created:** 2024-01-15 
-- **Modified:** 2024-01-15 
+- [Service Cloud REST API](https://apis.io/apis/service-cloud/service-cloud-rest-api/) — Core REST API for Service Cloud operations: sObject CRUD over Case, CaseComment, EmailMessage, Knowledge articles and every other standard and custom…
+- [Service Cloud Case Management API](https://apis.io/apis/service-cloud/service-cloud-case-management-api/) — The Case object and its children — CaseComment, CaseHistory, EmailMessage — worked through the sObjects REST resources. Assignment-rule behaviour on create…
+- [Service Cloud Knowledge API](https://apis.io/apis/service-cloud/service-cloud-knowledge-api/) — Knowledge article management — article versions, categories, publishing states and the knowledgeManagement REST resources used to surface self-service content.
+- [Service Cloud Omni-Channel API](https://apis.io/apis/service-cloud/service-cloud-omni-channel-api/) — Omni-channel presence, work assignment and routing, exposed through the connect/omnichannel REST resources and the ServiceChannel / PendingServiceRouting…
+- [Service Cloud Live Agent API](https://apis.io/apis/service-cloud/service-cloud-live-agent-api/) — Real-time chat with customers over the Live Agent REST surface. Superseded for new builds by Messaging for In-App and Web, which authenticates with the…
+- [Service Cloud Pub/Sub API](https://apis.io/apis/service-cloud/service-cloud-pubsub-api/) — The gRPC event API. Publish and subscribe to platform events and Change Data Capture events (including /data/CaseChangeEvent) with Avro-encoded payloads and…
+- [Service Cloud Streaming API](https://apis.io/apis/service-cloud/service-cloud-streaming-api/) — CometD/Bayeux long-polling surface for PushTopic, generic streaming and platform event subscriptions. The legacy transport; new integrations should use the…
+- [Service Cloud CTI API](https://apis.io/apis/service-cloud/service-cloud-cti-api/) — Open CTI — the JavaScript API that connects a telephony system's softphone to the Service Cloud console, plus the Voice/contact-centre surfaces built on it.
+- [Salesforce Hosted MCP Servers](https://apis.io/apis/service-cloud/salesforce-hosted-mcp-servers/) — Generally available remote Model Context Protocol servers that expose the Salesforce sObject layer to AI agents over OAuth. Four least-privilege SObject…
+- [Salesforce Service Cloud APIs Bot API](https://apis.io/apis/service-cloud/service-cloud-bot-api/) — The bot API from Salesforce Service Cloud APIs — 3 operation(s) for bot.
+- [Salesforce Service Cloud APIs Health API](https://apis.io/apis/service-cloud/service-cloud-health-api/) — The health API from Salesforce Service Cloud APIs — 1 operation(s) for health.
+- [Salesforce Service Cloud APIs Versions API](https://apis.io/apis/service-cloud/service-cloud-versions-api/) — The versions API from Salesforce Service Cloud APIs — 1 operation(s) for versions.
+- [Salesforce Service Cloud SOAP API](https://apis.io/apis/service-cloud/salesforce-service-cloud-soap-api/) — SOAP-based API for enterprise integration and complex service cloud operations.
+- [Knowledge API](https://apis.io/apis/service-cloud/knowledge-api/) — API for managing knowledge base articles and content.
+- [Einstein Bot API](https://apis.io/apis/service-cloud/einstein-bot-api/) — API for building and managing AI-powered chatbots for customer service.
+- [Omni-Channel API](https://apis.io/apis/service-cloud/omni-channel-api/) — API for managing omni-channel routing, agent presence, and work distribution across multiple service channels including chat, messaging, email, and voice.
+- [Service Cloud Voice Telephony Integration API](https://apis.io/apis/service-cloud/service-cloud-voice-telephony-integration-api/) — REST API for integrating telephony systems with Service Cloud Voice, enabling programmatic management of voice calls, call recording, and real-time…
+- [Service Cloud Voice for Partner Telephony API](https://apis.io/apis/service-cloud/service-cloud-voice-for-partner-telephony-api/) — Developer API for connecting third-party telephony systems to Service Cloud Voice, including the Connector API for passing information between contact…
+- [Agentforce Service Agent API](https://apis.io/apis/service-cloud/agentforce-service-agent-api/) — REST API for building and deploying AI-powered service agents using Agentforce, enabling headless agent interactions, session management, and seamless…
 
-## APIs
+### Published properties
 
-### Service Cloud REST API
-Core REST API for Service Cloud operations including cases, knowledge articles, and customer interactions
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-**Human URL:** [https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)
+#### AsyncAPI (1)
 
+Event-driven and webhook contracts.
 
-#### Tags:
+- [Service Cloud Event Surface](https://apis.io/asyncapis/service-cloud/service-cloud-event-surface/)
 
- - cases, customers, support, REST, CRM
+#### MCP servers (1)
 
-#### Properties
+Model Context Protocol servers that expose the API to agents.
 
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm)
-- [OpenAPI](https://api.salesforce.com/service-cloud/openapi.json)
-- [Authentication](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm)
-- [Swagger](https://api.salesforce.com/service-cloud/swagger.json)
+- [Salesforce Hosted MCP Servers + Salesforce DX MCP Server](https://apis.io/servers/service-cloud/salesforce-hosted-mcp-servers-salesforce-dx-mcp-server/)
 
-### Service Cloud Case Management API
-Specialized API for managing support cases, case routing, and escalations
+#### Overlays (4)
 
-**Human URL:** [https://developer.salesforce.com/docs/service/case-management](https://developer.salesforce.com/docs/service/case-management)
+OpenAPI overlays, including conversational phrasing for each operation.
 
+- [Service Cloud Bot Api Phrasing Overlay](https://apis.io/overlays/service-cloud/service-cloud-bot-api-phrasing-overlay/)
+- [Service Cloud Einstein Bots Overlay](https://apis.io/overlays/service-cloud/service-cloud-einstein-bots-overlay/)
+- [Service Cloud Health Api Phrasing Overlay](https://apis.io/overlays/service-cloud/service-cloud-health-api-phrasing-overlay/)
+- [Service Cloud Versions Api Phrasing Overlay](https://apis.io/overlays/service-cloud/service-cloud-versions-api-phrasing-overlay/)
 
-#### Tags:
+#### Security (4)
 
- - cases, tickets, escalation, routing
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Properties
+- [Service Cloud Authentication](https://apis.io/security/service-cloud/service-cloud-authentication/)
+- [Service Cloud Domain Security](https://apis.io/security/service-cloud/service-cloud-domain-security/)
+- [Service Cloud Trust Center](https://apis.io/security/service-cloud/service-cloud-trust-center/)
+- [Service Cloud Vulnerability Disclosure](https://apis.io/security/service-cloud/service-cloud-vulnerability-disclosure/)
 
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_case.htm)
-- [Examples](https://developer.salesforce.com/docs/service/case-examples)
+#### OAuth scopes (1)
 
-### Service Cloud Knowledge API
-API for managing knowledge articles, categories, and knowledge base operations
+The permissions the API asks for.
 
-**Human URL:** [https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/](https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/)
+- [Service Cloud Scopes](https://apis.io/scopes/service-cloud/service-cloud-scopes/)
 
+#### Plans and pricing (1)
 
-#### Tags:
+Published plans, tiers and prices.
 
- - knowledge, articles, documentation, self-service
+- [Service Cloud Plans Pricing](https://apis.io/plans/service-cloud/service-cloud-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development.htm)
-- [API Reference](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_knowledge.htm)
+Published request limits.
 
-### Service Cloud Omni-Channel API
-API for managing omni-channel routing, presence, and work assignments
+- [Service Cloud Rate Limits](https://apis.io/rate-limits/service-cloud/service-cloud-rate-limits/)
 
-**Human URL:** [https://developer.salesforce.com/docs/service/omnichannel](https://developer.salesforce.com/docs/service/omnichannel)
+#### FinOps (1)
 
+What the API costs to run, by operation.
 
-#### Tags:
+- [Service Cloud Finops](https://apis.io/finops/service-cloud/service-cloud-finops/)
 
- - omnichannel, routing, presence, workforce
+## Where to find this API
 
-#### Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_omnichannel.htm)
-- [Guide](https://help.salesforce.com/s/articleView?id=sf.omnichannel_intro.htm)
-
-### Service Cloud Live Agent API
-API for real-time chat and messaging with customers
-
-**Human URL:** [https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/](https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/)
-
-
-#### Tags:
-
- - chat, messaging, real-time, live-agent
-
-#### Properties
-
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_intro.htm)
-- [API Reference](https://developer.salesforce.com/docs/atlas.en-us.live_agent_rest.meta/live_agent_rest/live_agent_rest_API_calls.htm)
-
-### Service Cloud Einstein Bots API
-API for building and managing AI-powered chatbots for customer service
-
-**Human URL:** [https://developer.salesforce.com/docs/service/einstein-bots](https://developer.salesforce.com/docs/service/einstein-bots)
-
-
-#### Tags:
-
- - AI, bots, automation, einstein, chatbots
-
-#### Properties
-
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.bot_cookbook.meta/bot_cookbook/)
-- [API Reference](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_bot.htm)
-
-### Service Cloud Streaming API
-API for receiving near real-time notifications of changes to Service Cloud data
-
-**Human URL:** [https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/)
-
-
-#### Tags:
-
- - streaming, events, real-time, push-notifications
-
-#### Properties
-
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm)
-- [Guide](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/quick_start.htm)
-
-### Service Cloud CTI API
-Computer Telephony Integration API for connecting phone systems with Service Cloud
-
-**Human URL:** [https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/](https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/)
-
-
-#### Tags:
-
- - telephony, CTI, phone, call-center
-
-#### Properties
-
-- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_intro.htm)
-- [Integration Guide](https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_integration.htm)
-
-## Common Properties
-
-- [Portal](https://developer.salesforce.com/)
-- [Getting Started](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/quickstart.htm)
-- [Authentication](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_understanding_authentication.htm)
-- [Rate Limits](https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm)
-- [SDKs](https://developer.salesforce.com/tools/sdks)
-- [Status Page](https://status.salesforce.com/)
+- [Website](https://www.salesforce.com/service/)
+- [Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/)
+- [Getting started](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_what_is_rest_api.htm)
+- [API reference](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_list.htm)
+- [Pricing](https://www.salesforce.com/service/pricing/)
+- [Sign up](https://www.salesforce.com/products/free-trial/developer/)
 - [Support](https://help.salesforce.com/)
-- [Terms of Service](https://www.salesforce.com/company/legal/agreements/)
-- [Privacy Policy](https://www.salesforce.com/company/privacy/)
+- [Blog](https://www.salesforce.com/blog/)
+- [Security](https://www.salesforce.com/company/disclosure/)
+- [Compliance](https://compliance.salesforce.com/)
+- [Terms of service](https://www.salesforce.com/company/legal/agreements/)
+- [Privacy policy](https://www.salesforce.com/company/privacy/)
+- [GitHub](https://github.com/forcedotcom)
+- [Status](https://status.salesforce.com/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Salesforce
+**Kin Score 70.4** — exemplar · rubric 0.25.0 · scored 2026-10-23
 
-**Email:** developer@salesforce.com
+| Facet | Score |
+|---|---|
+| Discoverability | 58.3 |
+| Contract quality | 50.8 |
+| Contract governance | 18.2 |
+| Operational transparency | 84.2 |
+| Developer ergonomics | 82.7 |
+| Access clarity | 92.1 |
+
+**Agent readiness 46.2** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/service-cloud/](https://apis.io/providers/service-cloud/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Salesforce Service Cloud APIs: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/service-cloud/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
