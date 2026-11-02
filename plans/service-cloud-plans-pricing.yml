@@ -1,0 +1,144 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://www.salesforce.com/service/pricing/?bc=OTH
+sources:
+- https://www.salesforce.com/service/pricing/?bc=OTH
+- https://www.salesforce.com/service/pricing/
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T120612
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+  managed_tier: Core
+published: true
+note: Prices shown in multiple currencies via converter; API access priced as an add-on. Signature Success
+  Plan is 'Contact your account executive'.
+plan_count: 7
+currency: USD
+plans:
+- name: Starter Suite
+  price_text: $ 25 USD/User/Month (Starting price. Transaction fees apply. Billed monthly or annually.)
+  price: 25
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Lead, Account, Contact, and Opportunity Management; Dynamic Email Marketing and Analytics;
+    Built-in Sales Flows and Lead Routing; Connected Slack Conversations
+- name: Pro Suite
+  price_text: $ 100 USD/User/Month (Starting price. Transaction fees apply. Billed annually. Contract
+    required.)
+  price: 100
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Starter plus enhanced real-time chat, greater customization and automation,
+    sales quoting and forecasting, access to AgentExchange
+- name: Core
+  price_text: $ 195 USD/User/Month (Billed annually)
+  price: 195
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Case Management, Self-Service Help Center, Slack Business + with Slackbot, 500K Flex
+    Credits
+- name: Advanced
+  price_text: $ 395 USD/User/Month (Billed annually)
+  price: 395
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Core, AI agent for customer service, Premier Success Plan and full sandbox,
+    Backup & Recover / Data Detect, 1 million Flex Credits
+- name: Max
+  price_text: $ 550 USD/User/Month (Billed annually)
+  price: 550
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Advanced, full AI suite, contact center, IT Service (10 IT Service Desk
+    per org), Tableau Next, Slack Enterprise+, 2.75M Flex Credits per org per year
+- name: Enhanced Messaging add-on
+  price_text: Additional $75 USD/user/month
+  price: 75
+  currency: USD
+  period: month
+  unit: user
+- name: Web Services API add-on
+  price_text: Additional $25 USD/user/month
+  price: 25
+  currency: USD
+  period: month
+  unit: user
+rate_limit_statements:
+- Next Best Action 5k requests per user per month
+- Flow Builder 5 flows per org
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - seat
+  units:
+  - seat
+  plans:
+  - name: Starter Suite
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Pro Suite
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Core
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Advanced
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Max
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Enhanced Messaging add-on
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Web Services API add-on
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
