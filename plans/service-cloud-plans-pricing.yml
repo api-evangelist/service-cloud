@@ -79,7 +79,7 @@ rate_limit_statements:
 - Next Best Action 5k requests per user per month
 - Flow Builder 5 flows per org
 x-canonical:
-  generated: '2026-11-02'
+  generated: '2026-11-06'
   vocabulary: engine/economics/plans-canonical.yml
   models:
   - seat
